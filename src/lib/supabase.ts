@@ -75,6 +75,23 @@ class MockSupabaseClient {
               primary_doctor_phone: '+91 98765 43210',
               is_premium: true,
               created_at: new Date().toISOString()
+            },
+            {
+              id: 'faiz',
+              full_name: 'Faiz',
+              blood_group: 'A+',
+              date_of_birth: '1998-08-15',
+              address: '12, Mohammad Ali Road, Mumbai, Maharashtra, India',
+              medical_conditions: 'Severe chronic Asthma, carrying inhaler in pocket.',
+              allergies: 'Peanuts, Nuts, Bee stings',
+              current_medications: 'Albuterol Inhaler (as needed), Montelukast 10mg',
+              organ_donor: true,
+              insurance_provider: 'Star Health Insurance',
+              insurance_policy_number: 'SHI-ASTHMA-7722',
+              primary_doctor_name: 'Dr. Sameer Khan',
+              primary_doctor_phone: '+91 91111 22222',
+              is_premium: true,
+              created_at: new Date().toISOString()
             }
           ],
           contacts: [
@@ -93,6 +110,22 @@ class MockSupabaseClient {
               relationship: 'Brother',
               phone_number: '+91 96666 55555',
               is_primary: false
+            },
+            {
+              id: 'c3',
+              profile_id: 'faiz',
+              name: 'Ayesha Khan (Mother)',
+              relationship: 'Mother',
+              phone_number: '+91 99999 88888',
+              is_primary: true
+            },
+            {
+              id: 'c4',
+              profile_id: 'faiz',
+              name: 'Imran Khan (Father)',
+              relationship: 'Father',
+              phone_number: '+91 99999 77777',
+              is_primary: false
             }
           ],
           scans: [
@@ -105,6 +138,16 @@ class MockSupabaseClient {
               location_name: 'Near Cubbon Park, Bengaluru',
               ip_address: '103.241.12.9',
               user_agent: 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X)'
+            },
+            {
+              id: 's2',
+              profile_id: 'faiz',
+              scanned_at: new Date(Date.now() - 1800000).toISOString(),
+              latitude: 19.0760,
+              longitude: 72.8777,
+              location_name: 'Near Gateway of India, Mumbai',
+              ip_address: '103.250.14.22',
+              user_agent: 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_4 like Mac OS X)'
             }
           ]
         };
@@ -123,25 +166,44 @@ class MockSupabaseClient {
       scans: scansStr ? JSON.parse(scansStr) : []
     };
 
-    // Seed Aanya Verma on client-side if empty
+    // Seed Aanya Verma and Faiz on client-side if empty
     if (mockDb.profiles.length === 0) {
-      mockDb.profiles.push({
-        id: 'aanya-verma',
-        full_name: 'Aanya Verma',
-        blood_group: 'O+',
-        date_of_birth: '1995-04-12',
-        address: '74, Park Street, Bengaluru, Karnataka, India',
-        medical_conditions: 'Type 1 diabetes, carries insulin in bag.',
-        allergies: 'Penicillin, Shellfish',
-        current_medications: 'Humalog (Insulin Lyspro), Metformin',
-        organ_donor: true,
-        insurance_provider: 'Care Health Insurance',
-        insurance_policy_number: 'CHI-99887722-A',
-        primary_doctor_name: 'Dr. Ramesh Nair',
-        primary_doctor_phone: '+91 98765 43210',
-        is_premium: true,
-        created_at: new Date().toISOString()
-      });
+      mockDb.profiles.push(
+        {
+          id: 'aanya-verma',
+          full_name: 'Aanya Verma',
+          blood_group: 'O+',
+          date_of_birth: '1995-04-12',
+          address: '74, Park Street, Bengaluru, Karnataka, India',
+          medical_conditions: 'Type 1 diabetes, carries insulin in bag.',
+          allergies: 'Penicillin, Shellfish',
+          current_medications: 'Humalog (Insulin Lyspro), Metformin',
+          organ_donor: true,
+          insurance_provider: 'Care Health Insurance',
+          insurance_policy_number: 'CHI-99887722-A',
+          primary_doctor_name: 'Dr. Ramesh Nair',
+          primary_doctor_phone: '+91 98765 43210',
+          is_premium: true,
+          created_at: new Date().toISOString()
+        },
+        {
+          id: 'faiz',
+          full_name: 'Faiz',
+          blood_group: 'A+',
+          date_of_birth: '1998-08-15',
+          address: '12, Mohammad Ali Road, Mumbai, Maharashtra, India',
+          medical_conditions: 'Severe chronic Asthma, carrying inhaler in pocket.',
+          allergies: 'Peanuts, Nuts, Bee stings',
+          current_medications: 'Albuterol Inhaler (as needed), Montelukast 10mg',
+          organ_donor: true,
+          insurance_provider: 'Star Health Insurance',
+          insurance_policy_number: 'SHI-ASTHMA-7722',
+          primary_doctor_name: 'Dr. Sameer Khan',
+          primary_doctor_phone: '+91 91111 22222',
+          is_premium: true,
+          created_at: new Date().toISOString()
+        }
+      );
       mockDb.contacts.push(
         {
           id: 'c1',
@@ -158,18 +220,46 @@ class MockSupabaseClient {
           relationship: 'Brother',
           phone_number: '+91 96666 55555',
           is_primary: false
+        },
+        {
+          id: 'c3',
+          profile_id: 'faiz',
+          name: 'Ayesha Khan (Mother)',
+          relationship: 'Mother',
+          phone_number: '+91 99999 88888',
+          is_primary: true
+        },
+        {
+          id: 'c4',
+          profile_id: 'faiz',
+          name: 'Imran Khan (Father)',
+          relationship: 'Father',
+          phone_number: '+91 99999 77777',
+          is_primary: false
         }
       );
-      mockDb.scans.push({
-        id: 's1',
-        profile_id: 'aanya-verma',
-        scanned_at: new Date(Date.now() - 3600000).toISOString(),
-        latitude: 12.9716,
-        longitude: 77.5946,
-        location_name: 'Near Cubbon Park, Bengaluru',
-        ip_address: '103.241.12.9',
-        user_agent: 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X)'
-      });
+      mockDb.scans.push(
+        {
+          id: 's1',
+          profile_id: 'aanya-verma',
+          scanned_at: new Date(Date.now() - 3600000).toISOString(),
+          latitude: 12.9716,
+          longitude: 77.5946,
+          location_name: 'Near Cubbon Park, Bengaluru',
+          ip_address: '103.241.12.9',
+          user_agent: 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X)'
+        },
+        {
+          id: 's2',
+          profile_id: 'faiz',
+          scanned_at: new Date(Date.now() - 1800000).toISOString(),
+          latitude: 19.0760,
+          longitude: 72.8777,
+          location_name: 'Near Gateway of India, Mumbai',
+          ip_address: '103.250.14.22',
+          user_agent: 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_4 like Mac OS X)'
+        }
+      );
       this.saveStorage(mockDb);
     }
 
