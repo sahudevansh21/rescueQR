@@ -529,23 +529,39 @@ export function encodeProfileToMockToken(profile: any, contacts: any[] = []) {
   };
   
   const jsonStr = JSON.stringify(data);
+  let base64 = "";
   if (typeof window !== "undefined") {
-    return "m-" + btoa(unescape(encodeURIComponent(jsonStr)));
+    base64 = btoa(encodeURIComponent(jsonStr).replace(/%([0-9A-F]{2})/g, (match, p1) => {
+      return String.fromCharCode(parseInt(p1, 16));
+    }));
   } else {
-    return "m-" + Buffer.from(jsonStr).toString("base64");
+    base64 = Buffer.from(jsonStr, "utf-8").toString("base64");
   }
+  
+  // Convert to URL-safe Base64
+  return "m-" + base64.replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
 }
 
 export function decodeMockTokenToProfile(token: string): any {
   if (!token || !token.startsWith("m-")) return null;
   try {
-    const base64 = token.substring(2);
+    let base64 = token.substring(2);
+    // Restore standard Base64 from URL-safe
+    base64 = base64.replace(/-/g, "+").replace(/_/g, "/");
+    while (base64.length % 4) {
+      base64 += "=";
+    }
+    
     let jsonStr = "";
     if (typeof window !== "undefined") {
-      jsonStr = decodeURIComponent(escape(atob(base64)));
+      const binary = atob(base64);
+      jsonStr = decodeURIComponent(binary.split('').map((c) => {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+      }).join(''));
     } else {
       jsonStr = Buffer.from(base64, "base64").toString("utf-8");
     }
+    
     const data = JSON.parse(jsonStr);
     
     return {
@@ -574,3 +590,4 @@ export function decodeMockTokenToProfile(token: string): any {
     return null;
   }
 }
+
