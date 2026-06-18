@@ -49,6 +49,19 @@ interface Contact {
   is_primary: boolean;
 }
 
+const getSmsLink = (phoneNumber: string, patientName: string) => {
+  const cleanPhone = phoneNumber.replace(/\s+/g, "");
+  const message = `EMERGENCY: I have scanned the Lifeline Emergency QR for ${patientName || "this patient"}. They are in need of assistance. Please check on them immediately. Location: ${typeof window !== "undefined" ? window.location.href : ""}`;
+  const encodedMessage = encodeURIComponent(message);
+  
+  // Detect iOS
+  const isIOS = typeof navigator !== 'undefined' && /iPad|iPhone|iPod/.test(navigator.userAgent);
+  if (isIOS) {
+    return `sms:${cleanPhone}&body=${encodedMessage}`;
+  }
+  return `sms:${cleanPhone}?body=${encodedMessage}`;
+};
+
 export default function ScanPage() {
   const { id } = useParams() as { id: string };
   const [profile, setProfile] = useState<Profile | null>(null);
@@ -327,12 +340,20 @@ export default function ScanPage() {
               </p>
               <div className="flex justify-between items-center mt-1">
                 <span className="text-base font-mono font-bold text-[#0B2521]">{profile.phone}</span>
-                <button 
-                  onClick={() => openSosModal(profile.phone!, "Mobile Phone")} 
-                  className="bg-[#28a745] hover:bg-[#218838] text-white px-4 py-1.5 rounded-full text-xs font-bold shadow-sm transition-colors uppercase font-mono"
-                >
-                  Call
-                </button>
+                <div className="flex gap-2">
+                  <a 
+                    href={getSmsLink(profile.phone!, profile.full_name)}
+                    className="bg-[#17a2b8] hover:bg-[#138496] text-white px-4 py-1.5 rounded-full text-xs font-bold shadow-sm transition-colors uppercase font-mono flex items-center justify-center"
+                  >
+                    SMS
+                  </a>
+                  <button 
+                    onClick={() => openSosModal(profile.phone!, "Mobile Phone")} 
+                    className="bg-[#28a745] hover:bg-[#218838] text-white px-4 py-1.5 rounded-full text-xs font-bold shadow-sm transition-colors uppercase font-mono"
+                  >
+                    Call
+                  </button>
+                </div>
               </div>
             </div>
           )}
@@ -345,12 +366,20 @@ export default function ScanPage() {
               </p>
               <div className="flex justify-between items-center mt-1">
                 <span className="text-base font-mono font-bold text-[#0B2521]">{profile.father_mother_phone}</span>
-                <button 
-                  onClick={() => openSosModal(profile.father_mother_phone!, "Father/Mother")} 
-                  className="bg-[#28a745] hover:bg-[#218838] text-white px-4 py-1.5 rounded-full text-xs font-bold shadow-sm transition-colors uppercase font-mono"
-                >
-                  Call
-                </button>
+                <div className="flex gap-2">
+                  <a 
+                    href={getSmsLink(profile.father_mother_phone!, profile.full_name)}
+                    className="bg-[#17a2b8] hover:bg-[#138496] text-white px-4 py-1.5 rounded-full text-xs font-bold shadow-sm transition-colors uppercase font-mono flex items-center justify-center"
+                  >
+                    SMS
+                  </a>
+                  <button 
+                    onClick={() => openSosModal(profile.father_mother_phone!, "Father/Mother")} 
+                    className="bg-[#28a745] hover:bg-[#218838] text-white px-4 py-1.5 rounded-full text-xs font-bold shadow-sm transition-colors uppercase font-mono"
+                  >
+                    Call
+                  </button>
+                </div>
               </div>
             </div>
           )}
@@ -363,12 +392,20 @@ export default function ScanPage() {
               </p>
               <div className="flex justify-between items-center mt-1">
                 <span className="text-base font-mono font-bold text-[#0B2521]">{profile.brother_sister_phone}</span>
-                <button 
-                  onClick={() => openSosModal(profile.brother_sister_phone!, "Brother/Sister")} 
-                  className="bg-[#28a745] hover:bg-[#218838] text-white px-4 py-1.5 rounded-full text-xs font-bold shadow-sm transition-colors uppercase font-mono"
-                >
-                  Call
-                </button>
+                <div className="flex gap-2">
+                  <a 
+                    href={getSmsLink(profile.brother_sister_phone!, profile.full_name)}
+                    className="bg-[#17a2b8] hover:bg-[#138496] text-white px-4 py-1.5 rounded-full text-xs font-bold shadow-sm transition-colors uppercase font-mono flex items-center justify-center"
+                  >
+                    SMS
+                  </a>
+                  <button 
+                    onClick={() => openSosModal(profile.brother_sister_phone!, "Brother/Sister")} 
+                    className="bg-[#28a745] hover:bg-[#218838] text-white px-4 py-1.5 rounded-full text-xs font-bold shadow-sm transition-colors uppercase font-mono"
+                  >
+                    Call
+                  </button>
+                </div>
               </div>
             </div>
           )}
@@ -381,12 +418,20 @@ export default function ScanPage() {
               </p>
               <div className="flex justify-between items-center mt-1">
                 <span className="text-base font-mono font-bold text-[#0B2521]">{profile.friend_phone}</span>
-                <button 
-                  onClick={() => openSosModal(profile.friend_phone!, "Friend")} 
-                  className="bg-[#28a745] hover:bg-[#218838] text-white px-4 py-1.5 rounded-full text-xs font-bold shadow-sm transition-colors uppercase font-mono"
-                >
-                  Call
-                </button>
+                <div className="flex gap-2">
+                  <a 
+                    href={getSmsLink(profile.friend_phone!, profile.full_name)}
+                    className="bg-[#17a2b8] hover:bg-[#138496] text-white px-4 py-1.5 rounded-full text-xs font-bold shadow-sm transition-colors uppercase font-mono flex items-center justify-center"
+                  >
+                    SMS
+                  </a>
+                  <button 
+                    onClick={() => openSosModal(profile.friend_phone!, "Friend")} 
+                    className="bg-[#28a745] hover:bg-[#218838] text-white px-4 py-1.5 rounded-full text-xs font-bold shadow-sm transition-colors uppercase font-mono"
+                  >
+                    Call
+                  </button>
+                </div>
               </div>
             </div>
           )}
