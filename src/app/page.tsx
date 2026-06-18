@@ -19,7 +19,8 @@ import {
   HelpCircle,
   Clock,
   Printer,
-  X
+  X,
+  ChevronRight
 } from "lucide-react";
 
 export default function Home() {
@@ -204,6 +205,63 @@ export default function Home() {
           </svg>
         </div>
       </div>
+
+      {/* Portal Roles Section */}
+      <section className="py-12 bg-vlink-paper/50 border-y border-vlink-line/60">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            
+            {/* Customer Role Card */}
+            <div className="bg-white p-8 rounded-3xl border border-vlink-line/80 shadow-sm space-y-4 hover:shadow-md hover:border-vlink-trust/40 transition-all flex flex-col justify-between">
+              <div className="space-y-3">
+                <div className="w-12 h-12 rounded-2xl bg-vlink-pulse/10 text-vlink-pulse flex items-center justify-center">
+                  <Heart className="w-6 h-6 fill-vlink-pulse" />
+                </div>
+                <h3 className="text-xl font-bold text-vlink-trust-deep font-display">Customer Dashboard</h3>
+                <p className="text-sm text-vlink-ink-soft leading-relaxed">
+                  Register, log in, set up your personal emergency details (contacts, medications, allergies), and generate your unique QR data code. Print it onto wallet cards or helmet stickers.
+                </p>
+              </div>
+              <div className="pt-4 flex gap-4">
+                <Link
+                  href="/auth/signup"
+                  className="px-5 py-2.5 bg-vlink-pulse hover:bg-vlink-pulse/90 text-white font-bold rounded-full text-xs transition-all shadow-sm"
+                >
+                  Register Patient Profile
+                </Link>
+                <Link
+                  href="/auth/login"
+                  className="px-5 py-2.5 border border-vlink-line hover:border-vlink-trust text-vlink-trust-deep font-semibold rounded-full text-xs transition-all"
+                >
+                  Sign In
+                </Link>
+              </div>
+            </div>
+
+            {/* Admin Role Card */}
+            <div className="bg-white p-8 rounded-3xl border border-vlink-line/80 shadow-sm space-y-4 hover:shadow-md hover:border-vlink-trust/40 transition-all flex flex-col justify-between">
+              <div className="space-y-3">
+                <div className="w-12 h-12 rounded-2xl bg-vlink-trust/10 text-vlink-trust flex items-center justify-center">
+                  <ShieldCheck className="w-6 h-6" />
+                </div>
+                <h3 className="text-xl font-bold text-vlink-trust-deep font-display">Admin Registry</h3>
+                <p className="text-sm text-vlink-ink-soft leading-relaxed">
+                  Access the backend patient database directory. Search registered profiles, inspect emergency contact information, review real-time scan events, and analyze Gemini AI engine statistics.
+                </p>
+              </div>
+              <div className="pt-4">
+                <Link
+                  href="/admin"
+                  className="inline-flex items-center gap-1.5 px-6 py-2.5 bg-vlink-trust-deep hover:bg-vlink-trust text-white font-bold rounded-full text-xs transition-all shadow-sm"
+                >
+                  Access Admin Registry <ChevronRight className="w-4 h-4" />
+                </Link>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
 
       {/* How It Works Section */}
       <section id="how" className="py-20 bg-white">
