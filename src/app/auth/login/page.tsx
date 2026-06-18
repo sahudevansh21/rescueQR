@@ -50,11 +50,85 @@ export default function LoginPage() {
       // Mock Login Mode
       setTimeout(() => {
         setIsLoading(false);
-        // Any password or email works for mock demo
-        localStorage.setItem("vlink_logged_in", "true");
-        localStorage.setItem("vlink_uid", "aanya-verma"); // default mock user
-        window.dispatchEvent(new Event("vlink_auth_change"));
-        router.push("/dashboard");
+        
+        // Load mock profiles
+        const mockProfilesStr = localStorage.getItem("vlink_profiles") || "[]";
+        let mockProfiles = JSON.parse(mockProfilesStr);
+        
+        // Seed default profiles if not present
+        const hasAanya = mockProfiles.some((p: any) => p.id === "aanya-verma");
+        if (!hasAanya) {
+          mockProfiles.push({
+            id: 'aanya-verma',
+            full_name: 'Aanya Verma',
+            email: 'aanya@verma.com',
+            password: 'password123',
+            blood_group: 'O+',
+            date_of_birth: '1995-04-12',
+            address: '74, Park Street, Bengaluru, Karnataka, India',
+            medical_conditions: 'Type 1 diabetes, carries insulin in bag.',
+            allergies: 'Penicillin, Shellfish',
+            current_medications: 'Humalog (Insulin Lyspro), Metformin',
+            organ_donor: true,
+            insurance_provider: 'Care Health Insurance',
+            insurance_policy_number: 'CHI-99887722-A',
+            primary_doctor_name: 'Dr. Ramesh Nair',
+            primary_doctor_phone: '+91 98765 43210',
+            is_premium: true,
+            created_at: new Date().toISOString(),
+            phone: '9876543210',
+            vehicle_number: 'KA-03-MP-8899',
+            father_mother_phone: '9888877777',
+            brother_sister_phone: '9666655555',
+            friend_phone: '9555544444'
+          });
+        }
+        
+        const hasFaiz = mockProfiles.some((p: any) => p.id === "faiz");
+        if (!hasFaiz) {
+          mockProfiles.push({
+            id: 'faiz',
+            full_name: 'Faiz',
+            email: 'faiz@gmail.com',
+            password: 'password123',
+            blood_group: 'A+',
+            date_of_birth: '1998-08-15',
+            address: '12, Mohammad Ali Road, Mumbai, Maharashtra, India',
+            medical_conditions: 'Severe chronic Asthma, carrying inhaler in pocket.',
+            allergies: 'Peanuts, Nuts, Bee stings',
+            current_medications: 'Albuterol Inhaler (as needed), Montelukast 10mg',
+            organ_donor: true,
+            insurance_provider: 'Star Health Insurance',
+            insurance_policy_number: 'SHI-ASTHMA-7722',
+            primary_doctor_name: 'Dr. Sameer Khan',
+            primary_doctor_phone: '+91 91111 22222',
+            is_premium: true,
+            created_at: new Date().toISOString(),
+            phone: '9131797588',
+            vehicle_number: 'MH-01-AB-1234',
+            father_mother_phone: '9999988888',
+            brother_sister_phone: '9999977777',
+            friend_phone: '9131797588'
+          });
+        }
+        
+        localStorage.setItem("vlink_profiles", JSON.stringify(mockProfiles));
+        
+        // Find matching profile
+        const user = mockProfiles.find((p: any) => p.email && p.email.toLowerCase() === email.toLowerCase());
+        
+        if (user) {
+          if (user.password === password) {
+            localStorage.setItem("vlink_logged_in", "true");
+            localStorage.setItem("vlink_uid", user.id);
+            window.dispatchEvent(new Event("vlink_auth_change"));
+            router.push("/dashboard");
+          } else {
+            setErrorMsg("Incorrect password. Please try again.");
+          }
+        } else {
+          setErrorMsg("Account not found. Please sign up to create an account.");
+        }
       }, 800);
     }
   };

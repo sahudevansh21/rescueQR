@@ -29,6 +29,8 @@ export interface EmergencyProfile {
   father_mother_phone?: string;
   brother_sister_phone?: string;
   friend_phone?: string;
+  email?: string;
+  password?: string;
 }
 
 export interface EmergencyContact {
@@ -67,6 +69,8 @@ class MockSupabaseClient {
             {
               id: 'aanya-verma',
               full_name: 'Aanya Verma',
+              email: 'aanya@verma.com',
+              password: 'password123',
               blood_group: 'O+',
               date_of_birth: '1995-04-12',
               address: '74, Park Street, Bengaluru, Karnataka, India',
@@ -89,6 +93,8 @@ class MockSupabaseClient {
             {
               id: 'faiz',
               full_name: 'Faiz',
+              email: 'faiz@gmail.com',
+              password: 'password123',
               blood_group: 'A+',
               date_of_birth: '1998-08-15',
               address: '12, Mohammad Ali Road, Mumbai, Maharashtra, India',
@@ -187,6 +193,8 @@ class MockSupabaseClient {
         {
           id: 'aanya-verma',
           full_name: 'Aanya Verma',
+          email: 'aanya@verma.com',
+          password: 'password123',
           blood_group: 'O+',
           date_of_birth: '1995-04-12',
           address: '74, Park Street, Bengaluru, Karnataka, India',
@@ -209,6 +217,8 @@ class MockSupabaseClient {
         {
           id: 'faiz',
           full_name: 'Faiz',
+          email: 'faiz@gmail.com',
+          password: 'password123',
           blood_group: 'A+',
           date_of_birth: '1998-08-15',
           address: '12, Mohammad Ali Road, Mumbai, Maharashtra, India',

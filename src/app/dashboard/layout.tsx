@@ -38,6 +38,7 @@ export default function DashboardLayout({
 
   const handleLogout = () => {
     localStorage.removeItem("vlink_logged_in");
+    localStorage.removeItem("vlink_uid");
     localStorage.removeItem("vlink_user_profile");
     window.dispatchEvent(new Event("vlink_auth_change"));
     router.push("/");

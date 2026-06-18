@@ -35,6 +35,7 @@ export default function Navbar() {
 
   const handleLogout = () => {
     localStorage.removeItem("vlink_logged_in");
+    localStorage.removeItem("vlink_uid");
     localStorage.removeItem("vlink_user_profile");
     setIsLoggedIn(false);
     window.dispatchEvent(new Event("vlink_auth_change"));

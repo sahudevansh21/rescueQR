@@ -69,7 +69,7 @@ export default function SignupPage() {
       // Mock Sign Up
       setTimeout(() => {
         setIsLoading(false);
-        const uid = Math.random().toString(36).substr(2, 9);
+        const uid = "p-" + Math.random().toString(36).substr(2, 9);
         
         // Save initial profile details in localStorage mock store
         const mockProfilesStr = localStorage.getItem("vlink_profiles") || "[]";
@@ -78,6 +78,8 @@ export default function SignupPage() {
         mockProfiles.push({
           id: uid,
           full_name: fullName,
+          email: email.toLowerCase(),
+          password: password,
           blood_group: "",
           date_of_birth: "",
           address: "",
