@@ -38,6 +38,13 @@ export default function ProfilePage() {
   const [primaryDoctorName, setPrimaryDoctorName] = useState("");
   const [primaryDoctorPhone, setPrimaryDoctorPhone] = useState("");
   
+  // Lifeline QR specific fields
+  const [phone, setPhone] = useState("");
+  const [vehicleNumber, setVehicleNumber] = useState("");
+  const [fatherMotherPhone, setFatherMotherPhone] = useState("");
+  const [brotherSisterPhone, setBrotherSisterPhone] = useState("");
+  const [friendPhone, setFriendPhone] = useState("");
+  
   // Emergency Contacts state
   const [contacts, setContacts] = useState<Contact[]>([]);
   const [newContactName, setNewContactName] = useState("");
@@ -99,6 +106,11 @@ export default function ProfilePage() {
           setInsurancePolicyNumber(profile.insurance_policy_number || "");
           setPrimaryDoctorName(profile.primary_doctor_name || "");
           setPrimaryDoctorPhone(profile.primary_doctor_phone || "");
+          setPhone(profile.phone || "");
+          setVehicleNumber(profile.vehicle_number || "");
+          setFatherMotherPhone(profile.father_mother_phone || "");
+          setBrotherSisterPhone(profile.brother_sister_phone || "");
+          setFriendPhone(profile.friend_phone || "");
         }
 
         const { data: fetchedContacts } = await supabase
@@ -152,6 +164,11 @@ export default function ProfilePage() {
         setInsurancePolicyNumber(profile.insurance_policy_number || "");
         setPrimaryDoctorName(profile.primary_doctor_name || "");
         setPrimaryDoctorPhone(profile.primary_doctor_phone || "");
+        setPhone(profile.phone || "");
+        setVehicleNumber(profile.vehicle_number || "");
+        setFatherMotherPhone(profile.father_mother_phone || "");
+        setBrotherSisterPhone(profile.brother_sister_phone || "");
+        setFriendPhone(profile.friend_phone || "");
       }
 
       const mockContactsStr = localStorage.getItem("vlink_contacts") || "[]";
@@ -207,6 +224,11 @@ export default function ProfilePage() {
       insurance_policy_number: insurancePolicyNumber,
       primary_doctor_name: primaryDoctorName,
       primary_doctor_phone: primaryDoctorPhone,
+      phone,
+      vehicle_number: vehicleNumber,
+      father_mother_phone: fatherMotherPhone,
+      brother_sister_phone: brotherSisterPhone,
+      friend_phone: friendPhone,
       updated_at: new Date().toISOString()
     };
 
@@ -344,6 +366,29 @@ export default function ProfilePage() {
                   onChange={(e) => setFullName(e.target.value)}
                   placeholder="e.g. Aanya Verma"
                   className="w-full px-4 py-3 border border-vlink-line rounded-xl text-sm outline-none focus:border-vlink-trust bg-vlink-paper/10"
+                />
+              </div>
+
+              <div className="space-y-1.5">
+                <label className="text-xs font-semibold text-vlink-trust-deep">Mobile Number (नाम का मोबाइल न.) *</label>
+                <input
+                  type="tel"
+                  required
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  placeholder="e.g. 9131797588"
+                  className="w-full px-4 py-3 border border-vlink-line rounded-xl text-sm outline-none focus:border-vlink-trust bg-vlink-paper/10 font-mono"
+                />
+              </div>
+
+              <div className="space-y-1.5">
+                <label className="text-xs font-semibold text-vlink-trust-deep">Vehicle Number (गाड़ी न.)</label>
+                <input
+                  type="text"
+                  value={vehicleNumber}
+                  onChange={(e) => setVehicleNumber(e.target.value)}
+                  placeholder="e.g. KA-03-MP-8899"
+                  className="w-full px-4 py-3 border border-vlink-line rounded-xl text-sm outline-none focus:border-vlink-trust bg-vlink-paper/10 font-mono"
                 />
               </div>
 
@@ -487,6 +532,48 @@ export default function ProfilePage() {
                   onChange={(e) => setPrimaryDoctorPhone(e.target.value)}
                   placeholder="+91..."
                   className="w-full px-4 py-3 border border-vlink-line rounded-xl text-sm outline-none focus:border-vlink-trust bg-vlink-paper/10"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Section 4: Lifeline Emergency Contacts (Direct Mappings) */}
+          <div className="bg-white p-6 sm:p-8 rounded-3xl border border-vlink-line space-y-6">
+            <h3 className="text-lg font-bold text-vlink-trust-deep font-display border-b border-vlink-line pb-3 flex items-center gap-2">
+              <PhoneCall className="w-5 h-5 text-vlink-pulse" /> 4. Emergency Contacts (आपातकालीन नंबर)
+            </h3>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="space-y-1.5">
+                <label className="text-xs font-semibold text-vlink-trust-deep">Father/Mother's Mobile (पिता/ माता के मोबाइल न.)</label>
+                <input
+                  type="tel"
+                  value={fatherMotherPhone}
+                  onChange={(e) => setFatherMotherPhone(e.target.value)}
+                  placeholder="e.g. 9888877777"
+                  className="w-full px-4 py-3 border border-vlink-line rounded-xl text-sm outline-none focus:border-vlink-trust bg-vlink-paper/10 font-mono"
+                />
+              </div>
+
+              <div className="space-y-1.5">
+                <label className="text-xs font-semibold text-vlink-trust-deep">Brother/Sister's Mobile (भाई/बहन के मोबाइल न.)</label>
+                <input
+                  type="tel"
+                  value={brotherSisterPhone}
+                  onChange={(e) => setBrotherSisterPhone(e.target.value)}
+                  placeholder="e.g. 9666655555"
+                  className="w-full px-4 py-3 border border-vlink-line rounded-xl text-sm outline-none focus:border-vlink-trust bg-vlink-paper/10 font-mono"
+                />
+              </div>
+
+              <div className="space-y-1.5 col-span-2">
+                <label className="text-xs font-semibold text-vlink-trust-deep">Friend's Mobile (मित्र के मोबाइल न.)</label>
+                <input
+                  type="tel"
+                  value={friendPhone}
+                  onChange={(e) => setFriendPhone(e.target.value)}
+                  placeholder="e.g. 9555544444"
+                  className="w-full px-4 py-3 border border-vlink-line rounded-xl text-sm outline-none focus:border-vlink-trust bg-vlink-paper/10 font-mono"
                 />
               </div>
             </div>

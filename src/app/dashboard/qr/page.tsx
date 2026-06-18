@@ -13,6 +13,7 @@ import {
   Smartphone,
   Heart
 } from "lucide-react";
+import { isRealSupabase, encodeProfileToMockToken, supabase } from "@/lib/supabase";
 
 export default function QRManagementPage() {
   const [profileId, setProfileId] = useState("");
@@ -34,19 +35,51 @@ export default function QRManagementPage() {
     const uid = localStorage.getItem("vlink_uid") || "aanya-verma";
     setProfileId(uid);
 
-    // Fetch basic details to display on printable templates
     let name = "Aanya Verma";
     let blood = "O+";
     let phone = "+91 98888 77777";
+    let profileObj: any = null;
+    let contactsList: any[] = [];
 
-    const mockProfilesStr = localStorage.getItem("vlink_profiles") || "[]";
-    const mockProfiles = JSON.parse(mockProfilesStr);
-    const profile = mockProfiles.find((p: any) => p.id === uid);
-    
-    if (profile) {
-      name = profile.full_name || "Aanya Verma";
-      blood = profile.blood_group || "O+";
-      phone = profile.primary_doctor_phone || "+91 98888 77777";
+    if (isRealSupabase) {
+      try {
+        const { data: profile } = await supabase
+          .from("profiles")
+          .select("*")
+          .eq("id", uid)
+          .maybeSingle();
+        
+        if (profile) {
+          profileObj = profile;
+          name = profile.full_name || "Aanya Verma";
+          blood = profile.blood_group || "O+";
+          phone = profile.primary_doctor_phone || "+91 98888 77777";
+        }
+
+        const { data: contactsData } = await supabase
+          .from("emergency_contacts")
+          .select("*")
+          .eq("profile_id", uid);
+        contactsList = contactsData || [];
+      } catch (err) {
+        console.error("Supabase load failed:", err);
+      }
+    } else {
+      // LocalStorage Load
+      const mockProfilesStr = localStorage.getItem("vlink_profiles") || "[]";
+      const mockProfiles = JSON.parse(mockProfilesStr);
+      const profile = mockProfiles.find((p: any) => p.id === uid);
+      
+      if (profile) {
+        profileObj = profile;
+        name = profile.full_name || "Aanya Verma";
+        blood = profile.blood_group || "O+";
+        phone = profile.primary_doctor_phone || "+91 98888 77777";
+      }
+
+      const mockContactsStr = localStorage.getItem("vlink_contacts") || "[]";
+      const mockContacts = JSON.parse(mockContactsStr);
+      contactsList = mockContacts.filter((c: any) => c.profile_id === uid);
     }
     
     setProfileName(name);
@@ -54,7 +87,13 @@ export default function QRManagementPage() {
     setDoctorPhone(phone);
 
     // Construct public responder scan URL
-    const url = `${window.location.origin}/scan/${uid}`;
+    let url = "";
+    if (isRealSupabase) {
+      url = `${window.location.origin}/scan/${uid}`;
+    } else {
+      // Generate a dynamic self-contained token representing all the details
+      url = `${window.location.origin}/scan/${encodeProfileToMockToken(profileObj || { id: uid, full_name: name, blood_group: blood, primary_doctor_phone: phone }, contactsList)}`;
+    }
     setScanUrl(url);
 
     try {

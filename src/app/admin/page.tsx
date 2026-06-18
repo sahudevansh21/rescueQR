@@ -23,7 +23,7 @@ import {
   X,
   UserPlus
 } from "lucide-react";
-import { supabase, isRealSupabase } from "@/lib/supabase";
+import { supabase, isRealSupabase, encodeProfileToMockToken } from "@/lib/supabase";
 import QRCode from "qrcode";
 
 interface PatientUser {
@@ -240,10 +240,19 @@ export default function AdminDashboard() {
     }
   };
 
+  const getScanUrlForUser = (u: PatientUser) => {
+    const origin = typeof window !== "undefined" ? window.location.origin : "https://vitallink.ai";
+    if (isRealSupabase) {
+      return `${origin}/scan/${u.id}`;
+    } else {
+      // Encode user profile info in the URL in mock mode
+      return `${origin}/scan/${encodeProfileToMockToken(u.profile, [])}`;
+    }
+  };
+
   const handleOpenQr = async (u: PatientUser) => {
     setSelectedUser(u);
-    const origin = typeof window !== "undefined" ? window.location.origin : "https://vitallink.ai";
-    const scanUrl = `${origin}/scan/${u.id}`;
+    const scanUrl = getScanUrlForUser(u);
     
     try {
       const url = await QRCode.toDataURL(scanUrl, {
@@ -261,11 +270,10 @@ export default function AdminDashboard() {
     }
   };
 
-  const copyScanLink = (uid: string) => {
-    const origin = window.location.origin;
-    const url = `${origin}/scan/${uid}`;
+  const copyScanLink = (u: PatientUser) => {
+    const url = getScanUrlForUser(u);
     navigator.clipboard.writeText(url);
-    setCopiedId(uid);
+    setCopiedId(u.id);
     setTimeout(() => setCopiedId(""), 2000);
   };
 
@@ -443,7 +451,7 @@ export default function AdminDashboard() {
                           </button>
                           
                           <button
-                            onClick={() => copyScanLink(u.id)}
+                            onClick={() => copyScanLink(u)}
                             className="inline-flex items-center gap-1 px-2.5 py-1 border border-vlink-line hover:border-vlink-trust text-vlink-trust-deep rounded bg-white shadow-sm font-semibold transition-colors"
                             title="Copy Direct scan url"
                           >
@@ -458,13 +466,14 @@ export default function AdminDashboard() {
                             )}
                           </button>
 
-                          <Link
-                            href={`/scan/${u.id}`}
+                          <a
+                            href={getScanUrlForUser(u)}
                             target="_blank"
+                            rel="noopener noreferrer"
                             className="inline-flex items-center gap-1 px-2.5 py-1 border border-vlink-line hover:border-vlink-trust bg-white text-vlink-trust hover:underline rounded shadow-sm font-semibold"
                           >
                             Scan Page <ExternalLink className="w-3 h-3" />
-                          </Link>
+                          </a>
 
                           <button
                             onClick={() => handleDeleteUser(u.id)}
@@ -707,7 +716,7 @@ export default function AdminDashboard() {
 
             <div className="space-y-2.5">
               <button
-                onClick={() => copyScanLink(selectedUser.id)}
+                onClick={() => copyScanLink(selectedUser)}
                 className="w-full py-2.5 bg-white border border-vlink-line hover:border-vlink-trust rounded-full font-bold text-vlink-trust-deep transition-all flex items-center justify-center gap-2"
               >
                 {copiedId === selectedUser.id ? (
@@ -732,7 +741,7 @@ export default function AdminDashboard() {
 
             <p className="text-[10px] text-vlink-ink-soft leading-normal text-center">
               This QR code leads to the unique emergency route: <br />
-              <span className="break-all font-mono text-[9px] font-bold text-vlink-trust-deep">{`${window.location.origin}/scan/${selectedUser.id}`}</span>
+              <span className="break-all font-mono text-[9px] font-bold text-vlink-trust-deep">{getScanUrlForUser(selectedUser)}</span>
             </p>
           </div>
         </div>

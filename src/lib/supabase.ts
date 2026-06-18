@@ -24,6 +24,11 @@ export interface EmergencyProfile {
   primary_doctor_phone: string;
   is_premium: boolean;
   created_at: string;
+  phone?: string;
+  vehicle_number?: string;
+  father_mother_phone?: string;
+  brother_sister_phone?: string;
+  friend_phone?: string;
 }
 
 export interface EmergencyContact {
@@ -74,7 +79,12 @@ class MockSupabaseClient {
               primary_doctor_name: 'Dr. Ramesh Nair',
               primary_doctor_phone: '+91 98765 43210',
               is_premium: true,
-              created_at: new Date().toISOString()
+              created_at: new Date().toISOString(),
+              phone: '9876543210',
+              vehicle_number: 'KA-03-MP-8899',
+              father_mother_phone: '9888877777',
+              brother_sister_phone: '9666655555',
+              friend_phone: '9555544444'
             },
             {
               id: 'faiz',
@@ -91,7 +101,12 @@ class MockSupabaseClient {
               primary_doctor_name: 'Dr. Sameer Khan',
               primary_doctor_phone: '+91 91111 22222',
               is_premium: true,
-              created_at: new Date().toISOString()
+              created_at: new Date().toISOString(),
+              phone: '9131797588',
+              vehicle_number: 'MH-01-AB-1234',
+              father_mother_phone: '9999988888',
+              brother_sister_phone: '9999977777',
+              friend_phone: '9131797588'
             }
           ],
           contacts: [
@@ -184,7 +199,12 @@ class MockSupabaseClient {
           primary_doctor_name: 'Dr. Ramesh Nair',
           primary_doctor_phone: '+91 98765 43210',
           is_premium: true,
-          created_at: new Date().toISOString()
+          created_at: new Date().toISOString(),
+          phone: '9876543210',
+          vehicle_number: 'KA-03-MP-8899',
+          father_mother_phone: '9888877777',
+          brother_sister_phone: '9666655555',
+          friend_phone: '9555544444'
         },
         {
           id: 'faiz',
@@ -201,7 +221,12 @@ class MockSupabaseClient {
           primary_doctor_name: 'Dr. Sameer Khan',
           primary_doctor_phone: '+91 91111 22222',
           is_premium: true,
-          created_at: new Date().toISOString()
+          created_at: new Date().toISOString(),
+          phone: '9131797588',
+          vehicle_number: 'MH-01-AB-1234',
+          father_mother_phone: '9999988888',
+          brother_sister_phone: '9999977777',
+          friend_phone: '9131797588'
         }
       );
       mockDb.contacts.push(
@@ -475,3 +500,77 @@ class MockSupabaseClient {
 export const supabase = isRealSupabase
   ? createClient(supabaseUrl, supabaseAnonKey)
   : (new MockSupabaseClient() as any);
+
+export function encodeProfileToMockToken(profile: any, contacts: any[] = []) {
+  const fmp = contacts.find((c: any) => c.relationship?.toLowerCase().includes("mother") || c.relationship?.toLowerCase().includes("father") || c.relationship?.toLowerCase().includes("parent"))?.phone_number || profile.father_mother_phone || "";
+  const bsp = contacts.find((c: any) => c.relationship?.toLowerCase().includes("brother") || c.relationship?.toLowerCase().includes("sister") || c.relationship?.toLowerCase().includes("sibling"))?.phone_number || profile.brother_sister_phone || "";
+  const fp = contacts.find((c: any) => c.relationship?.toLowerCase().includes("friend"))?.phone_number || profile.friend_phone || "";
+
+  const data = {
+    id: profile.id,
+    n: profile.full_name,
+    b: profile.blood_group,
+    d: profile.date_of_birth,
+    a: profile.address,
+    c: profile.medical_conditions,
+    al: profile.allergies,
+    m: profile.current_medications,
+    od: profile.organ_donor,
+    ip: profile.insurance_provider,
+    in: profile.insurance_policy_number,
+    dn: profile.primary_doctor_name,
+    dp: profile.primary_doctor_phone,
+    p: profile.phone || "",
+    v: profile.vehicle_number || "",
+    fmp,
+    bsp,
+    fp,
+    s: Math.random().toString(36).substr(2, 5)
+  };
+  
+  const jsonStr = JSON.stringify(data);
+  if (typeof window !== "undefined") {
+    return "m-" + btoa(unescape(encodeURIComponent(jsonStr)));
+  } else {
+    return "m-" + Buffer.from(jsonStr).toString("base64");
+  }
+}
+
+export function decodeMockTokenToProfile(token: string): any {
+  if (!token || !token.startsWith("m-")) return null;
+  try {
+    const base64 = token.substring(2);
+    let jsonStr = "";
+    if (typeof window !== "undefined") {
+      jsonStr = decodeURIComponent(escape(atob(base64)));
+    } else {
+      jsonStr = Buffer.from(base64, "base64").toString("utf-8");
+    }
+    const data = JSON.parse(jsonStr);
+    
+    return {
+      id: data.id || "mock-user",
+      full_name: data.n || "",
+      blood_group: data.b || "",
+      date_of_birth: data.d || "",
+      address: data.a || "",
+      medical_conditions: data.c || "",
+      allergies: data.al || "",
+      current_medications: data.m || "",
+      organ_donor: data.od || false,
+      insurance_provider: data.ip || "",
+      insurance_policy_number: data.in || "",
+      primary_doctor_name: data.dn || "",
+      primary_doctor_phone: data.dp || "",
+      phone: data.p || "",
+      vehicle_number: data.v || "",
+      father_mother_phone: data.fmp || "",
+      brother_sister_phone: data.bsp || "",
+      friend_phone: data.fp || "",
+      is_premium: true
+    };
+  } catch (e) {
+    console.error("Decode failed", e);
+    return null;
+  }
+}
