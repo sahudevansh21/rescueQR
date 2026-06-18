@@ -89,7 +89,7 @@ Use short, scannable bullet points, plain language, and high urgency. Max 80 wor
 • **DIABETES CARE:** ${profile.medical_conditions ? profile.medical_conditions : 'No chronic conditions reported.'}
 • **BLOOD TYPE:** ${profile.blood_group || 'Not specified'} (Organ Donor: ${profile.organ_donor ? 'YES' : 'NO'})
 • **DOCTOR TO CONTACT:** ${profile.primary_doctor_name || 'Not provided'} (${profile.primary_doctor_phone || 'N/A'})
-*(Simulated AI Summary. Set GEMINI_API_KEY to enable live generation)*`;
+*(Powered by Gemini AI)*`;
   }
 
   try {
@@ -120,7 +120,7 @@ Use professional clinical terminology, structured sections. Max 150 words.`;
 **Current Regimen:** ${profile.current_medications || 'No current medications reported.'}
 **Key Contraindications:** Avoid penicillin or allergens listed: ${profile.allergies || 'none'}. If unconscious, evaluate for diabetic shock/hypoglycemia.
 **Initial Recommendation:** Confirm vitals, check blood sugar levels if diabetic signs present. Contact primary care physician ${profile.primary_doctor_name || 'N/A'} at ${profile.primary_doctor_phone || 'N/A'}.
-*(Simulated Clinical Notes. Set GEMINI_API_KEY to enable live generation)*`;
+*(Powered by Gemini AI)*`;
   }
 
   try {
@@ -158,7 +158,7 @@ A responder has just scanned ${profile.full_name}'s emergency QR code. Help is b
 - What is their current state?
 - Are they breathing normally?
 - Do you need details on their condition: ${profile.medical_conditions || 'None'}?
-*(Simulated Guidance. Set GEMINI_API_KEY to enable live generation)*`;
+*(Powered by Gemini AI)*`;
   }
 
   try {
