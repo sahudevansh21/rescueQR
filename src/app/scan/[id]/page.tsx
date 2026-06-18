@@ -478,6 +478,31 @@ export default function ScanPage() {
             </div>
           )}
 
+          {/* Doctor & Insurance Info Card */}
+          {(profile.primary_doctor_name || profile.insurance_provider || profile.insurance_policy_number) && (
+            <div className="border-2 border-[#d1e42d] p-4 rounded-xl bg-[#fafafa] space-y-1.5">
+              <p className="font-bold text-xs text-[#555] uppercase flex items-center gap-1.5">
+                🏥 Medical Doctor & Insurance (चिकित्सक और बीमा):
+              </p>
+              {profile.primary_doctor_name && (
+                <div className="text-xs text-[#333]">
+                  <strong>Primary Doctor:</strong> {profile.primary_doctor_name} 
+                  {profile.primary_doctor_phone && ` (${profile.primary_doctor_phone})`}
+                </div>
+              )}
+              {profile.insurance_provider && (
+                <div className="text-xs text-[#333]">
+                  <strong>Insurance Provider:</strong> {profile.insurance_provider}
+                </div>
+              )}
+              {profile.insurance_policy_number && (
+                <div className="text-xs text-[#333]">
+                  <strong>Policy Number:</strong> {profile.insurance_policy_number}
+                </div>
+              )}
+            </div>
+          )}
+
           {/* 8.5. Government ID */}
           {profile.government_id && (
             <div className="border-2 border-[#d1e42d] p-4 rounded-xl bg-[#fafafa]">
