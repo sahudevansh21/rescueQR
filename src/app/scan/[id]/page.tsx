@@ -49,19 +49,6 @@ interface Contact {
   is_primary: boolean;
 }
 
-const getSmsLink = (phoneNumber: string, patientName: string) => {
-  const cleanPhone = phoneNumber.replace(/\s+/g, "");
-  const message = `EMERGENCY: I have scanned the Lifeline Emergency QR for ${patientName || "this patient"}. They are in need of assistance. Please check on them immediately. Location: ${typeof window !== "undefined" ? window.location.href : ""}`;
-  const encodedMessage = encodeURIComponent(message);
-  
-  // Detect iOS
-  const isIOS = typeof navigator !== 'undefined' && /iPad|iPhone|iPod/.test(navigator.userAgent);
-  if (isIOS) {
-    return `sms:${cleanPhone}&body=${encodedMessage}`;
-  }
-  return `sms:${cleanPhone}?body=${encodedMessage}`;
-};
-
 export default function ScanPage() {
   const { id } = useParams() as { id: string };
   const [profile, setProfile] = useState<Profile | null>(null);
@@ -70,6 +57,29 @@ export default function ScanPage() {
   const [notFound, setNotFound] = useState(false);
   const [gpsStatus, setGpsStatus] = useState("Acquiring GPS location...");
   const [alertsSent, setAlertsSent] = useState(false);
+  const [latitude, setLatitude] = useState<number | null>(null);
+  const [longitude, setLongitude] = useState<number | null>(null);
+
+  const getSmsLink = (phoneNumber: string, patientName: string) => {
+    const cleanPhone = phoneNumber.replace(/\s+/g, "");
+    
+    let locationStr = "";
+    if (latitude && longitude) {
+      locationStr = `Location: https://www.google.com/maps/search/?api=1&query=${latitude},${longitude}`;
+    } else {
+      locationStr = `Location: ${window.location.origin}/scan/${profile?.id || "patient"}`;
+    }
+
+    const message = `EMERGENCY: I have scanned the Lifeline Emergency QR for ${patientName || "this patient"}. They need assistance. ${locationStr}`;
+    const encodedMessage = encodeURIComponent(message);
+    
+    // Detect iOS
+    const isIOS = typeof navigator !== 'undefined' && /iPad|iPhone|iPod/.test(navigator.userAgent);
+    if (isIOS) {
+      return `sms:${cleanPhone}&body=${encodedMessage}`;
+    }
+    return `sms:${cleanPhone}?body=${encodedMessage}`;
+  };
 
   // SOS Modal State
   const [isSosOpen, setIsSosOpen] = useState(false);
@@ -201,6 +211,8 @@ export default function ScanPage() {
         async (position) => {
           const lat = position.coords.latitude;
           const lng = position.coords.longitude;
+          setLatitude(lat);
+          setLongitude(lng);
           setGpsStatus(`GPS acquired: ${lat.toFixed(4)}, ${lng.toFixed(4)}`);
           await triggerScanEvent(profileObj, lat, lng);
         },
