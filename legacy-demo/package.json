@@ -1,0 +1,17 @@
+{
+  "name": "pulsetag-qr",
+  "version": "1.0.0",
+  "description": "PulseTag QR — emergency identification QR tags with a Gemini-powered AI emergency assistant.",
+  "main": "server.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "dotenv": "^16.4.5",
+    "qrcode": "^1.5.3",
+    "nanoid": "^3.3.7"
+  }
+}

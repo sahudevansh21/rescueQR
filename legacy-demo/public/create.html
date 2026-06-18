@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Create your PulseTag profile</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/style.css">
+<style>
+  .form-shell{ max-width: 640px; margin: 0 auto; padding: 56px 28px 90px; }
+  .form-card{ background: var(--paper-raised); border:1px solid var(--line); border-radius: 18px; padding: 32px; }
+  .field{ margin-bottom: 18px; }
+  .field label{ display:block; font-size:0.85rem; font-weight:600; color: var(--trust-deep); margin-bottom:6px; }
+  .field-hint{ font-size:0.78rem; color: var(--ink-soft); margin-top:4px; }
+  .field input, .field select, .field textarea{
+    width:100%; padding: 11px 13px; border:1px solid var(--line); border-radius:10px;
+    font-family: var(--font-body); font-size:0.94rem; background: var(--paper); outline:none;
+  }
+  .field input:focus, .field select:focus, .field textarea:focus{ border-color: var(--trust); }
+  .field-row{ display:grid; grid-template-columns: 1fr 1fr; gap:14px; }
+  @media (max-width:560px){ .field-row{ grid-template-columns:1fr; } }
+  .form-foot{ display:flex; justify-content:flex-end; margin-top: 24px; }
+  #result{ display:none; text-align:center; }
+  #result img{ width:220px; margin: 0 auto 18px; border-radius:12px; border:1px solid var(--line); }
+  #result .link-box{ font-family: var(--font-mono); font-size:0.82rem; background: var(--paper); padding:10px 14px; border-radius:10px; word-break:break-all; margin-bottom:18px; }
+  #errorMsg{ color:#B3261E; font-size:0.85rem; margin-top:10px; display:none; }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="wrap">
+    <a class="logo" href="/">
+      <svg class="logo-mark" viewBox="0 0 30 30"><circle cx="15" cy="15" r="14" fill="none" stroke="#1C5C53" stroke-width="2"/><path d="M5,15 L11,15 L13,9 L17,21 L19,15 L25,15" fill="none" stroke="#FF5A4E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      PulseTag QR
+    </a>
+    <div class="nav-cta"><a class="btn btn-ghost" href="/">Back home</a></div>
+  </div>
+</nav>
+
+<div class="form-shell">
+  <div class="section-head" style="margin-bottom:26px;">
+    <span class="eyebrow">Create a profile</span>
+    <h2>A few details now save precious minutes later.</h2>
+    <p>This information is only shown to whoever scans your tag.</p>
+  </div>
+
+  <div class="form-card" id="formCard">
+    <form id="profileForm">
+      <div class="field">
+        <label for="name">Full name *</label>
+        <input id="name" name="name" type="text" required placeholder="e.g. Aanya Verma">
+      </div>
+      <div class="field">
+        <label for="address">Home address</label>
+        <input id="address" name="address" type="text" placeholder="Optional — helps responders confirm identity">
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label for="bloodGroup">Blood group</label>
+          <select id="bloodGroup" name="bloodGroup">
+            <option value="">Select</option>
+            <option>A+</option><option>A-</option><option>B+</option><option>B-</option>
+            <option>O+</option><option>O-</option><option>AB+</option><option>AB-</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="allergies">Allergies</label>
+          <input id="allergies" name="allergies" type="text" placeholder="e.g. Penicillin">
+        </div>
+      </div>
+      <div class="field">
+        <label for="medicalConditions">Medical conditions</label>
+        <textarea id="medicalConditions" name="medicalConditions" rows="3" placeholder="e.g. Type 1 diabetes, carries insulin"></textarea>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label for="emergencyContactName">Primary emergency contact</label>
+          <input id="emergencyContactName" name="emergencyContactName" type="text" placeholder="Name">
+        </div>
+        <div class="field">
+          <label for="emergencyContactPhone">Phone *</label>
+          <input id="emergencyContactPhone" name="emergencyContactPhone" type="tel" required placeholder="+91...">
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label for="secondaryContactName">Secondary contact</label>
+          <input id="secondaryContactName" name="secondaryContactName" type="text" placeholder="Optional">
+        </div>
+        <div class="field">
+          <label for="secondaryContactPhone">Phone</label>
+          <input id="secondaryContactPhone" name="secondaryContactPhone" type="tel" placeholder="Optional">
+        </div>
+      </div>
+
+      <div id="errorMsg"></div>
+      <div class="form-foot">
+        <button class="btn btn-primary" type="submit">Generate my QR tag</button>
+      </div>
+    </form>
+  </div>
+
+  <div class="form-card" id="result">
+    <span class="eyebrow">Your tag is ready</span>
+    <h3 style="margin: 14px 0 18px;">Print this or save it to your phone</h3>
+    <img id="qrImg" alt="Your QR tag">
+    <div class="link-box" id="profileLink"></div>
+    <a class="btn btn-primary" id="viewProfileBtn" href="#" target="_blank">View public profile</a>
+  </div>
+</div>
+
+<script src="/js/create.js"></script>
+</body>
+</html>

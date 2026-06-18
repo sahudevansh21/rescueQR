@@ -1,0 +1,111 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --font-display: 'Space Grotesk', -apple-system, sans-serif;
+    --font-body: 'Inter', -apple-system, sans-serif;
+    --font-mono: 'IBM Plex Mono', monospace;
+  }
+  
+  body {
+    background-color: #F1F4EE; /* vlink-paper */
+    color: #15201D; /* vlink-ink */
+    font-family: var(--font-body);
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+    font-weight: 700;
+  }
+}
+
+/* Custom Utilities */
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(217, 223, 214, 0.6);
+}
+
+.glass-dark {
+  background: rgba(17, 51, 45, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Emergency Beacon Indicator Animation */
+@keyframes beacon {
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(255, 90, 78, 0.7);
+  }
+  70% {
+    transform: scale(1);
+    box-shadow: 0 0 0 10px rgba(255, 90, 78, 0);
+  }
+  100% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(255, 90, 78, 0);
+  }
+}
+
+.animate-beacon {
+  animation: beacon 2s infinite;
+}
+
+/* ECG Pulse Divider animation line flow */
+.pulse-line-blip {
+  animation: travel-blip 3s linear infinite;
+}
+
+@keyframes travel-blip {
+  from {
+    offset-distance: 0%;
+  }
+  to {
+    offset-distance: 100%;
+  }
+}
+
+/* Custom Scrollbar for dashboards */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(28, 92, 83, 0.2);
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(28, 92, 83, 0.4);
+}
+
+/* Print layouts for wallet cards */
+@media print {
+  body {
+    background: white;
+    color: black;
+  }
+  .no-print {
+    display: none !important;
+  }
+  .print-only {
+    display: block !important;
+  }
+  .print-card {
+    border: 2px solid #000 !important;
+    border-radius: 12px !important;
+    padding: 15px !important;
+    width: 3.375in !important;
+    height: 2.125in !important;
+    box-sizing: border-box !important;
+    page-break-inside: avoid !important;
+  }
+}

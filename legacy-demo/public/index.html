@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PulseTag QR — Emergency ID tags that speak for you</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<nav class="nav">
+  <div class="wrap">
+    <a class="logo" href="/">
+      <svg class="logo-mark" viewBox="0 0 30 30"><circle cx="15" cy="15" r="14" fill="none" stroke="#1C5C53" stroke-width="2"/><path d="M5,15 L11,15 L13,9 L17,21 L19,15 L25,15" fill="none" stroke="#FF5A4E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      PulseTag QR
+    </a>
+    <div class="nav-links">
+      <a href="#how">How it works</a>
+      <a href="#features">Features</a>
+      <a href="#ai">AI Assistant</a>
+      <a href="#testimonials">Reviews</a>
+    </div>
+    <div class="nav-cta">
+      <a class="btn btn-ghost" href="/create.html">Sign in</a>
+      <a class="btn btn-primary" href="/create.html">Get your tag</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap hero-grid">
+    <div class="hero-copy">
+      <span class="eyebrow">// Emergency identification, reimagined</span>
+      <h1>One scan tells responders everything they need to know.</h1>
+      <p class="lead">PulseTag QR turns a small card or wristband into a lifeline. Scan it, and a first responder instantly sees who someone is, who to call, and what matters medically — no app, no login, no guessing.</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="/create.html">Create your profile</a>
+        <a class="btn btn-ghost" href="#how">See how it works</a>
+      </div>
+      <div class="hero-trust">
+        <span>NO APP REQUIRED</span>
+        <span>ENCRYPTED PROFILES</span>
+        <span>AI-ASSISTED BRIEFS</span>
+      </div>
+    </div>
+    <div class="tag-mock">
+      <div class="tag-card">
+        <div class="tag-top">
+          <span class="eyebrow">PulseTag · 001</span>
+          <svg class="heart" viewBox="0 0 24 24"><path d="M2,12 L8,12 L10,5 L14,19 L16,12 L22,12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="tag-qr" id="heroQr"></div>
+        <div class="tag-name">Aanya Verma</div>
+        <div class="tag-meta">O+ &nbsp;·&nbsp; No known allergies</div>
+      </div>
+      <div class="scan-pop"><b>Scanned ✓</b>Profile shown in 0.4s — emergency contact notified</div>
+    </div>
+  </div>
+</header>
+
+<div class="pulse-divider wrap">
+  <svg viewBox="0 0 1180 60" preserveAspectRatio="none">
+    <path class="pulse-line-path" d="M0,30 L500,30 L525,8 L550,52 L575,30 L1180,30"/>
+    <circle class="pulse-line-blip" r="5">
+      <animateMotion dur="3.2s" repeatCount="indefinite" path="M0,30 L500,30 L525,8 L550,52 L575,30 L1180,30"/>
+    </circle>
+  </svg>
+</div>
+
+<section id="values">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">What guides us</span>
+      <h2>Built on three things that don't bend under pressure.</h2>
+    </div>
+    <div class="values-grid">
+      <div class="value-card">
+        <span class="vnum">SAFETY</span>
+        <h3>People first, always</h3>
+        <p>Every decision starts with one question: does this help someone get found and helped faster.</p>
+      </div>
+      <div class="value-card">
+        <span class="vnum">INNOVATION</span>
+        <h3>Tech that earns its place</h3>
+        <p>QR codes, secure profiles, and now AI briefings — we only add technology that makes the critical seconds count.</p>
+      </div>
+      <div class="value-card">
+        <span class="vnum">TRUST</span>
+        <h3>Reliable when it matters most</h3>
+        <p>Your data is encrypted and only shown to whoever scans the tag in the moment it's needed — nothing more.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="how">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">How it works</span>
+      <h2>From accident to action, in four beats.</h2>
+      <p>The same flow whether it's a stranger on the road or a hospital triage desk.</p>
+    </div>
+    <div class="stage-row">
+      <div class="stage">
+        <span class="stage-no">BEAT 01</span>
+        <h3>Someone scans the tag</h3>
+        <p>Any phone camera works — no app, no account, no signal required to open it.</p>
+      </div>
+      <div class="stage">
+        <span class="stage-no">BEAT 02</span>
+        <h3>Profile opens instantly</h3>
+        <p>Name, blood group, conditions, allergies, and emergency contacts appear in seconds.</p>
+      </div>
+      <div class="stage">
+        <span class="stage-no">BEAT 03</span>
+        <h3>AI briefs the responder</h3>
+        <p>Gemini turns the raw profile into a 10-second spoken-style summary, flagging anything critical first.</p>
+      </div>
+      <div class="stage">
+        <span class="stage-no">BEAT 04</span>
+        <h3>Contacts are reachable</h3>
+        <p>Family and emergency numbers are one tap away, so help can be coordinated immediately.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="features-band">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">Why people choose PulseTag</span>
+      <h2>Designed for the worst moment, not the best demo.</h2>
+    </div>
+    <div class="features-grid">
+      <div class="feature"><h3>Works under stress</h3><p>A clean, single-glance layout designed for people who are panicking, not browsing.</p></div>
+      <div class="feature"><h3>Live scan alerts</h3><p>Get notified the moment your tag is scanned, so you know help may already be on the way.</p></div>
+      <div class="feature"><h3>Profiles for everyone</h3><p>Separate profile types for kids, elderly parents, and pets — each with the fields that matter for them.</p></div>
+      <div class="feature"><h3>Always-on support</h3><p>A real support line, 24/7, for lost tags, profile edits, or anything urgent.</p></div>
+      <div class="feature"><h3>Battery-free by design</h3><p>The tag itself needs no power — it's just a printed code, so it never runs out at the wrong time.</p></div>
+      <div class="feature"><h3>Encrypted by default</h3><p>Profile data is encrypted at rest and only ever shown to whoever scans the physical tag.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="ai">
+  <div class="wrap ai-band">
+    <div>
+      <span class="eyebrow">Powered by Gemini</span>
+      <h2>An AI that reads the profile so people don't have to.</h2>
+      <p style="color:var(--ink-soft); margin-top:14px;">Raw medical fields are hard to parse in a panic. Our AI Emergency Brief uses Google's Gemini models to turn a profile into a short, calm summary that leads with whatever's safety-critical — built right into every scan.</p>
+      <a class="btn btn-ghost" style="margin-top:22px;" href="/create.html">Try creating a profile</a>
+    </div>
+    <div class="ai-card">
+      <span class="eyebrow" style="margin-bottom:14px; display:block;">SAMPLE AI BRIEF</span>
+      <div class="ai-row"><span class="ai-dot"></span><p><b>Allergy alert:</b> severe reaction to penicillin — avoid administering.</p></div>
+      <div class="ai-row"><span class="ai-dot"></span><p><b>Condition:</b> Type 1 diabetic, carries insulin in bag.</p></div>
+      <div class="ai-row"><span class="ai-dot"></span><p><b>Blood group:</b> B negative.</p></div>
+      <div class="ai-row"><span class="ai-dot"></span><p><b>Contact:</b> mother, Priya Sharma, reachable now — tap to call.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="testimonials">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">From people who use it</span>
+      <h2>Real situations, told in their own words.</h2>
+    </div>
+    <div class="testi-grid">
+      <div class="testi-card">
+        <p class="quote">My father has early dementia and wanders sometimes. The QR card on his keychain has already helped a neighbor bring him home twice.</p>
+        <div class="testi-who"><div class="testi-avatar">R</div><div><div class="testi-name">Rohan M.</div><div class="testi-loc">Pune</div></div></div>
+      </div>
+      <div class="testi-card">
+        <p class="quote">After a cycling accident, the paramedics scanned my tag and knew about my blood thinners before I could even speak. That mattered.</p>
+        <div class="testi-who"><div class="testi-avatar">S</div><div><div class="testi-name">Sana K.</div><div class="testi-loc">Bengaluru</div></div></div>
+      </div>
+      <div class="testi-card">
+        <p class="quote">Set up my kids' school bag tags in under five minutes. Simple enough that I actually finished it instead of putting it off.</p>
+        <div class="testi-who"><div class="testi-avatar">A</div><div><div class="testi-name">Arjun D.</div><div class="testi-loc">Indore</div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="cta-band">
+    <h2>Your information, ready before you need it.</h2>
+    <p>Set up a profile in under five minutes — print a card or order a wristband.</p>
+    <a class="btn btn-primary" href="/create.html">Get your PulseTag</a>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap foot-grid">
+    <div class="logo">
+      <svg class="logo-mark" viewBox="0 0 30 30"><circle cx="15" cy="15" r="14" fill="none" stroke="#1C5C53" stroke-width="2"/><path d="M5,15 L11,15 L13,9 L17,21 L19,15 L25,15" fill="none" stroke="#FF5A4E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      PulseTag QR
+    </div>
+    <div class="foot-links">
+      <a href="#how">How it works</a>
+      <a href="#features">Features</a>
+      <a href="/create.html">Create a profile</a>
+    </div>
+    <div class="foot-note">DEMO PROJECT — NOT A REAL MEDICAL OR EMERGENCY SERVICE</div>
+  </div>
+</footer>
+
+<!-- AI chat widget -->
+<button class="chat-launcher" id="chatLauncher" aria-label="Open assistant">
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+</button>
+<div class="chat-panel" id="chatPanel">
+  <div class="chat-head">Ask PulseTag<span>Powered by Gemini</span></div>
+  <div class="chat-body" id="chatBody">
+    <div class="msg bot">Hi! Ask me how PulseTag QR works, what's included, or how to set up a profile.</div>
+  </div>
+  <div class="chat-input">
+    <input id="chatInput" type="text" placeholder="Type a question…">
+    <button id="chatSend">Send</button>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="/js/main.js"></script>
+</body>
+</html>
