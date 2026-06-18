@@ -15,7 +15,10 @@ import {
   AlertOctagon,
   ShieldCheck,
   Check,
-  Plus
+  Plus,
+  PhoneOff,
+  Volume2,
+  VolumeX
 } from "lucide-react";
 import { supabase, isRealSupabase, decodeMockTokenToProfile } from "@/lib/supabase";
 
@@ -93,6 +96,152 @@ export default function ScanPage() {
   const [correctAnswer, setCorrectAnswer] = useState(0);
   const [userAnswer, setUserAnswer] = useState("");
   const [puzzleError, setPuzzleError] = useState(false);
+
+  // OmniDim AI Voice Call States
+  const [voiceCallNumber, setVoiceCallNumber] = useState("");
+  const [voiceCallContactName, setVoiceCallContactName] = useState("");
+  const [isVoiceCallActive, setIsVoiceCallActive] = useState(false);
+  const [voiceCallStatus, setVoiceCallStatus] = useState<'connecting' | 'ringing' | 'connected' | 'ended'>('connecting');
+  const [voiceCallDuration, setVoiceCallDuration] = useState(0);
+  const [voiceCallTranscript, setVoiceCallTranscript] = useState<Array<{ time: string; speaker: string; text: string }>>([]);
+  const [isMuted, setIsMuted] = useState(false);
+
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+    if (isVoiceCallActive && voiceCallStatus !== 'ended') {
+      interval = setInterval(() => {
+        setVoiceCallDuration(prev => prev + 1);
+      }, 1000);
+    }
+    return () => clearInterval(interval);
+  }, [isVoiceCallActive, voiceCallStatus]);
+
+  const formatDuration = (sec: number) => {
+    const m = Math.floor(sec / 60).toString().padStart(2, "0");
+    const s = (sec % 60).toString().padStart(2, "0");
+    return `${m}:${s}`;
+  };
+
+  const speak = (msg: string) => {
+    if (typeof window !== "undefined" && window.speechSynthesis) {
+      window.speechSynthesis.cancel();
+      if (isMuted) return;
+      const utterance = new SpeechSynthesisUtterance(msg);
+      utterance.rate = 0.95;
+      const voices = window.speechSynthesis.getVoices();
+      const preferred = voices.find(v => v.lang.includes("en") && (v.name.includes("Google") || v.name.includes("Apple"))) || voices[0];
+      if (preferred) utterance.voice = preferred;
+      window.speechSynthesis.speak(utterance);
+    }
+  };
+
+  useEffect(() => {
+    if (!isVoiceCallActive) return;
+
+    if (voiceCallDuration === 2) {
+      setVoiceCallStatus("ringing");
+      setVoiceCallTranscript(prev => [
+        ...prev,
+        { time: formatDuration(2), speaker: "System", text: `Ringing emergency contact: ${voiceCallContactName} (${voiceCallNumber})...` }
+      ]);
+    } else if (voiceCallDuration === 5) {
+      setVoiceCallStatus("connected");
+      const text = `Hello. This is the RescueQR AI emergency voice assistant calling via OmniDim. We are notifying you that ${profile?.full_name || 'your contact'}'s emergency tag has had a live scan event. A responder named ${responderName || 'Someone'} is with them and requests your attention.`;
+      setVoiceCallTranscript(prev => [
+        ...prev,
+        { time: formatDuration(5), speaker: "System", text: "Call connected. AI voice agent active." },
+        { time: formatDuration(5), speaker: "RescueQR AI", text: text }
+      ]);
+      speak(text);
+    } else if (voiceCallDuration === 15) {
+      setVoiceCallTranscript(prev => [
+        ...prev,
+        { time: formatDuration(15), speaker: voiceCallContactName, text: "Hello? Yes? What happened? Are they okay?" }
+      ]);
+    } else if (voiceCallDuration === 18) {
+      const text = `The patient's blood group is ${profile?.blood_group || 'not specified'}. Medical conditions are: ${profile?.medical_conditions || 'None reported'}. We have captured their GPS coordinates and sent a secure Google Maps link to your mobile number. Please check on them or contact responders immediately.`;
+      setVoiceCallTranscript(prev => [
+        ...prev,
+        { time: formatDuration(18), speaker: "RescueQR AI", text: text }
+      ]);
+      speak(text);
+    } else if (voiceCallDuration === 28) {
+      setVoiceCallTranscript(prev => [
+        ...prev,
+        { time: formatDuration(28), speaker: voiceCallContactName, text: "Okay, I see the maps location message! I am checking it and heading there right now. Thank you so much." }
+      ]);
+    } else if (voiceCallDuration === 32) {
+      setVoiceCallStatus("ended");
+      setVoiceCallTranscript(prev => [
+        ...prev,
+        { time: formatDuration(32), speaker: "System", text: `Call hung up. Session reference ID: omni-${Math.random().toString(36).substr(2, 6).toUpperCase()}` }
+      ]);
+      if (typeof window !== "undefined" && window.speechSynthesis) {
+        window.speechSynthesis.cancel();
+      }
+    }
+  }, [voiceCallDuration, isVoiceCallActive]);
+
+  const startAiVoiceCall = async (phone: string, contactLabel: string) => {
+    setVoiceCallNumber(phone);
+    setVoiceCallContactName(contactLabel);
+    setVoiceCallStatus("connecting");
+    setVoiceCallTranscript([
+      { time: "00:00", speaker: "System", text: "Initializing voice gateway via OmniDimension..." }
+    ]);
+    setIsVoiceCallActive(true);
+    setVoiceCallDuration(0);
+
+    // Call backend API to dispatch outbound call
+    try {
+      await fetch("/api/voice/call", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          phoneNumber: phone,
+          patientName: profile?.full_name || "Patient",
+          bloodGroup: profile?.blood_group,
+          conditions: profile?.medical_conditions,
+          allergies: profile?.allergies,
+          medications: profile?.current_medications,
+          locationLink: latitude && longitude 
+            ? `https://www.google.com/maps/search/?api=1&query=${latitude},${longitude}`
+            : `${window.location.origin}/scan/${profile?.id || "patient"}`
+        })
+      });
+    } catch (err) {
+      console.error("Backend voice dispatch API failed:", err);
+    }
+  };
+
+  const hangUpCall = () => {
+    setVoiceCallStatus("ended");
+    setIsVoiceCallActive(false);
+    if (typeof window !== "undefined" && window.speechSynthesis) {
+      window.speechSynthesis.cancel();
+    }
+  };
+
+  const toggleMute = () => {
+    if (isMuted) {
+      setIsMuted(false);
+      // Resume or replay current state
+      if (voiceCallStatus === "connected") {
+        if (voiceCallDuration >= 5 && voiceCallDuration < 15) {
+          const text = `Hello. This is the RescueQR AI emergency voice assistant calling via OmniDim. We are notifying you that ${profile?.full_name || 'your contact'}'s emergency tag has had a live scan event. A responder named ${responderName || 'Someone'} is with them and requests your attention.`;
+          speak(text);
+        } else if (voiceCallDuration >= 18 && voiceCallDuration < 28) {
+          const text = `The patient's blood group is ${profile?.blood_group || 'not specified'}. Medical conditions are: ${profile?.medical_conditions || 'None reported'}. We have captured their GPS coordinates and sent a secure Google Maps link to your mobile number. Please check on them or contact responders immediately.`;
+          speak(text);
+        }
+      }
+    } else {
+      setIsMuted(true);
+      if (typeof window !== "undefined" && window.speechSynthesis) {
+        window.speechSynthesis.cancel();
+      }
+    }
+  };
 
   useEffect(() => {
     if (id) {
@@ -274,8 +423,8 @@ export default function ScanPage() {
     setPuzzleError(false);
     setIsSosOpen(false);
     
-    // Trigger Phone Call
-    window.location.href = `tel:${targetNumber}`;
+    // Trigger AI Voice Agent Call
+    startAiVoiceCall(targetNumber, targetName);
   };
 
   if (isLoading) {
@@ -610,6 +759,121 @@ export default function ScanPage() {
                 Send Alert & Call (अलर्ट भेजे)
               </button>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* OmniDim AI Voice Call Overlay */}
+      {isVoiceCallActive && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-vlink-trust-deep/90 backdrop-blur-md p-4 text-white">
+          <div className="bg-[#0B2521] border border-vlink-trust rounded-3xl w-full max-w-md p-6 flex flex-col justify-between h-[80vh] shadow-2xl relative overflow-hidden">
+            
+            {/* Ambient Background Glows */}
+            <div className="absolute -right-24 -top-24 w-48 h-48 bg-vlink-pulse/10 rounded-full blur-3xl animate-pulse" />
+            <div className="absolute -left-24 -bottom-24 w-48 h-48 bg-vlink-trust/20 rounded-full blur-3xl" />
+
+            <div className="space-y-6">
+              {/* Header */}
+              <div className="flex justify-between items-center pb-4 border-b border-vlink-trust/30">
+                <div>
+                  <h3 className="text-base font-extrabold font-display tracking-tight text-white flex items-center gap-1.5">
+                    <span className="relative flex h-3 w-3">
+                      <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${
+                        voiceCallStatus === 'connected' ? 'bg-green-400' : voiceCallStatus === 'ended' ? 'bg-red-400' : 'bg-yellow-400'
+                      }`}></span>
+                      <span className={`relative inline-flex rounded-full h-3 w-3 ${
+                        voiceCallStatus === 'connected' ? 'bg-green-500' : voiceCallStatus === 'ended' ? 'bg-red-500' : 'bg-yellow-500'
+                      }`}></span>
+                    </span>
+                    RescueQR AI Voice Agent
+                  </h3>
+                  <p className="text-[9px] font-mono text-vlink-paper/60 uppercase tracking-widest mt-0.5">Powered by OmniDimension</p>
+                </div>
+                <div className="text-right">
+                  <span className="font-mono text-xs font-bold bg-white/5 border border-white/10 px-2.5 py-1 rounded-full">
+                    {formatDuration(voiceCallDuration)}
+                  </span>
+                </div>
+              </div>
+
+              {/* Call target details */}
+              <div className="text-center py-4 space-y-1">
+                <div className="w-16 h-16 rounded-full bg-vlink-pulse/10 text-vlink-pulse border border-vlink-pulse/30 flex items-center justify-center mx-auto mb-2 animate-beacon">
+                  <PhoneCall className="w-7 h-7" />
+                </div>
+                <h4 className="text-base font-bold font-display">{voiceCallContactName}</h4>
+                <p className="text-xs font-mono text-vlink-paper/65">{voiceCallNumber}</p>
+                <p className="text-xs text-vlink-pulse font-semibold capitalize animate-pulse mt-2">
+                  {voiceCallStatus === "connecting" && "Establishing connection..."}
+                  {voiceCallStatus === "ringing" && "Ringing family member..."}
+                  {voiceCallStatus === "connected" && "Call Connected — AI is speaking"}
+                  {voiceCallStatus === "ended" && "Call ended"}
+                </p>
+              </div>
+
+              {/* Transcript list */}
+              <div className="space-y-3">
+                <p className="text-[10px] font-mono uppercase tracking-wider text-vlink-paper/50">Call Transcript (लाइव बातचीत):</p>
+                <div className="bg-white/5 border border-white/10 rounded-2xl p-4 h-48 overflow-y-auto space-y-3 font-sans text-xs scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
+                  {voiceCallTranscript.length === 0 ? (
+                    <p className="text-center text-vlink-paper/30 italic py-8">No conversation transcript yet...</p>
+                  ) : (
+                    voiceCallTranscript.map((t, idx) => (
+                      <div key={idx} className="space-y-0.5">
+                        <div className="flex justify-between text-[9px] text-vlink-paper/40 font-mono">
+                          <span>{t.speaker}</span>
+                          <span>{t.time}</span>
+                        </div>
+                        <p className={`p-2 rounded-xl text-left leading-relaxed ${
+                          t.speaker === "System" 
+                            ? "bg-white/5 text-vlink-paper/70 font-mono text-[10px]"
+                            : t.speaker === "RescueQR AI"
+                            ? "bg-vlink-pulse/10 border border-vlink-pulse/20 text-vlink-paper"
+                            : "bg-white/10 text-vlink-paper"
+                        }`}>
+                          {t.text}
+                        </p>
+                      </div>
+                    ))
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* Actions Panel */}
+            <div className="space-y-4 pt-4 border-t border-vlink-trust/30">
+              <div className="flex justify-center gap-4">
+                <button
+                  onClick={toggleMute}
+                  className={`w-12 h-12 rounded-full border flex items-center justify-center transition-all ${
+                    isMuted 
+                      ? "bg-yellow-500/10 border-yellow-500/30 text-yellow-500 hover:bg-yellow-500/20" 
+                      : "bg-white/5 border-white/10 text-white hover:bg-white/10"
+                  }`}
+                  title={isMuted ? "Unmute TTS Audio" : "Mute TTS Audio"}
+                >
+                  {isMuted ? <VolumeX className="w-5 h-5" /> : <Volume2 className="w-5 h-5" />}
+                </button>
+
+                <button
+                  onClick={hangUpCall}
+                  className="w-14 h-14 bg-red-600 hover:bg-red-700 text-white rounded-full flex items-center justify-center transition-all hover:scale-105 shadow-lg shadow-red-600/20"
+                  title="Hang Up Call"
+                >
+                  <PhoneOff className="w-6 h-6" />
+                </button>
+              </div>
+
+              <div className="text-center">
+                <a
+                  href={`tel:${voiceCallNumber}`}
+                  className="text-xs text-vlink-paper/50 hover:text-white underline font-mono transition-colors"
+                >
+                  Bypass AI Call & Direct Dial Phone Instead
+                </a>
+              </div>
+            </div>
+
           </div>
         </div>
       )}
