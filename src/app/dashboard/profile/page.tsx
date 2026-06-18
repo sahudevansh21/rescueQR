@@ -11,7 +11,8 @@ import {
   Trash, 
   ShieldAlert, 
   Sparkles,
-  Info
+  Info,
+  FileText
 } from "lucide-react";
 import { supabase, isRealSupabase } from "@/lib/supabase";
 
@@ -51,6 +52,9 @@ export default function ProfilePage() {
   const [newContactName, setNewContactName] = useState("");
   const [newContactRel, setNewContactRel] = useState("");
   const [newContactPhone, setNewContactPhone] = useState("");
+  
+  // Document Uploads state
+  const [uploadedDocs, setUploadedDocs] = useState<Array<{ name: string, type: string, data: string }>>([]);
 
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
@@ -114,6 +118,7 @@ export default function ProfilePage() {
           setBrotherSisterPhone(profile.brother_sister_phone || "");
           setFriendPhone(profile.friend_phone || "");
           setGovernmentId(profile.government_id || "");
+          setUploadedDocs(profile.documents ? JSON.parse(profile.documents) : []);
         }
 
         const { data: fetchedContacts } = await supabase
@@ -173,6 +178,7 @@ export default function ProfilePage() {
         setBrotherSisterPhone(profile.brother_sister_phone || "");
         setFriendPhone(profile.friend_phone || "");
         setGovernmentId(profile.government_id || "");
+        setUploadedDocs(profile.documents ? JSON.parse(profile.documents) : []);
       }
 
       const mockContactsStr = localStorage.getItem("vlink_contacts") || "[]";
@@ -234,6 +240,7 @@ export default function ProfilePage() {
       brother_sister_phone: brotherSisterPhone,
       friend_phone: friendPhone,
       government_id: governmentId,
+      documents: JSON.stringify(uploadedDocs),
       updated_at: new Date().toISOString()
     };
 
@@ -271,6 +278,34 @@ export default function ProfilePage() {
         setSaveStatus("success");
       }, 600);
     }
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files) return;
+    Array.from(e.target.files).forEach((file) => {
+      // Validate file size (under 2MB)
+      if (file.size > 2 * 1024 * 1024) {
+        alert(`File ${file.name} is too large. Max size is 2MB.`);
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setUploadedDocs((prev) => [
+          ...prev,
+          {
+            name: file.name,
+            type: file.type,
+            data: reader.result as string,
+          },
+        ]);
+      };
+      reader.readAsDataURL(file);
+    });
+  };
+
+  const removeDocument = (index: number) => {
+    setUploadedDocs((prev) => prev.filter((_, i) => i !== index));
   };
 
   const addContact = () => {
@@ -591,6 +626,60 @@ export default function ProfilePage() {
                   placeholder="e.g. 9555544444"
                   className="w-full px-4 py-3 border border-vlink-line rounded-xl text-sm outline-none focus:border-vlink-trust bg-vlink-paper/10 font-mono"
                 />
+              </div>
+            </div>
+          </div>
+
+          {/* Section 5: Documents Upload (Optional) */}
+          <div className="bg-white p-6 sm:p-8 rounded-3xl border border-vlink-line space-y-6">
+            <h3 className="text-lg font-bold text-vlink-trust-deep font-display border-b border-vlink-line pb-3 flex items-center gap-2">
+              <FileText className="w-5 h-5 text-vlink-trust" /> 5. Emergency Documents (Optional)
+            </h3>
+            
+            <div className="space-y-4">
+              <p className="text-xs text-vlink-ink-soft">
+                Upload relevant medical records, prescriptions, or IDs (Max 2MB per file). These will be visible to responders during scans.
+              </p>
+              
+              <div className="flex flex-col sm:flex-row gap-4 items-center">
+                <input
+                  type="file"
+                  id="doc-upload"
+                  multiple
+                  accept="image/*,application/pdf"
+                  onChange={handleFileChange}
+                  className="hidden"
+                />
+                <label
+                  htmlFor="doc-upload"
+                  className="px-6 py-3 bg-vlink-paper/50 hover:bg-vlink-paper border border-vlink-line text-vlink-trust-deep font-bold rounded-xl text-xs flex items-center gap-2 cursor-pointer shadow-sm transition-colors"
+                >
+                  <Plus className="w-4.5 h-4.5 text-vlink-trust" /> Choose Files
+                </label>
+              </div>
+
+              {/* Uploaded Files List */}
+              <div className="space-y-2.5">
+                {uploadedDocs.length > 0 ? (
+                  uploadedDocs.map((doc, idx) => (
+                    <div key={idx} className="p-3 bg-vlink-paper/20 border border-vlink-line rounded-xl flex justify-between items-center text-xs">
+                      <div className="flex items-center gap-2">
+                        <FileText className="w-4 h-4 text-vlink-trust" />
+                        <span className="font-semibold text-vlink-trust-deep truncate max-w-[150px] sm:max-w-xs">{doc.name}</span>
+                        <span className="text-[10px] text-vlink-ink-soft">({doc.type.split("/")[1]?.toUpperCase() || "File"})</span>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => removeDocument(idx)}
+                        className="text-vlink-ink-soft/40 hover:text-vlink-pulse p-1"
+                      >
+                        <Trash className="w-4 h-4" />
+                      </button>
+                    </div>
+                  ))
+                ) : (
+                  <p className="text-xs text-vlink-ink-soft italic">No documents uploaded yet.</p>
+                )}
               </div>
             </div>
           </div>

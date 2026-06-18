@@ -19,6 +19,7 @@ CREATE TABLE IF NOT EXISTS public.profiles (
   insurance_policy_number TEXT,
   primary_doctor_name TEXT,
   primary_doctor_phone TEXT,
+  documents TEXT,
   is_premium BOOLEAN DEFAULT false,
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()

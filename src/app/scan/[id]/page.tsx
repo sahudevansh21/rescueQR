@@ -15,7 +15,8 @@ import {
   AlertOctagon,
   ShieldCheck,
   Check,
-  Plus
+  Plus,
+  Sparkles
 } from "lucide-react";
 import { supabase, isRealSupabase, decodeMockTokenToProfile } from "@/lib/supabase";
 
@@ -39,6 +40,7 @@ interface Profile {
   brother_sister_phone?: string;
   friend_phone?: string;
   government_id?: string;
+  documents?: string;
 }
 
 interface Contact {
@@ -59,6 +61,8 @@ export default function ScanPage() {
   const [alertsSent, setAlertsSent] = useState(false);
   const [latitude, setLatitude] = useState<number | null>(null);
   const [longitude, setLongitude] = useState<number | null>(null);
+  const [aiSummary, setAiSummary] = useState<string | null>(null);
+  const [isAiLoading, setIsAiLoading] = useState(false);
 
   const getSmsLink = (phoneNumber: string, patientName: string) => {
     const cleanPhone = phoneNumber.replace(/\s+/g, "");
@@ -192,6 +196,9 @@ export default function ScanPage() {
     setContacts(fetchedContacts);
     setIsLoading(false);
     
+    // Fetch Gemini AI Summary brief
+    fetchAiSummary(fetchedProfile);
+
     // Auto-request location and submit scan event
     captureLocationAndLog(fetchedProfile);
   };
@@ -235,6 +242,25 @@ export default function ScanPage() {
       }
     } catch (e) {
       console.error("Failed to log scan:", e);
+    }
+  };
+
+  const fetchAiSummary = async (profileObj: Profile) => {
+    setIsAiLoading(true);
+    try {
+      const res = await fetch("/api/ai/summary", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ profile: profileObj })
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setAiSummary(data.summary);
+      }
+    } catch (e) {
+      console.error("Failed to load AI summary:", e);
+    } finally {
+      setIsAiLoading(false);
     }
   };
 
@@ -289,6 +315,29 @@ export default function ScanPage() {
 
         {/* Dynamic Patient Info Boxes */}
         <div className="space-y-3">
+          
+          {/* Gemini AI Summary Card */}
+          <div className="border-2 border-[#1C5C53]/35 bg-vlink-trust/5 p-4 rounded-xl relative overflow-hidden">
+            {/* Ambient background decoration */}
+            <div className="absolute -right-6 -bottom-6 w-20 h-20 bg-vlink-trust/10 rounded-full blur-xl pointer-events-none" />
+            
+            <p className="font-bold text-xs text-vlink-trust-deep uppercase flex items-center gap-1.5">
+              <Sparkles className="w-4 h-4 text-vlink-pulse animate-pulse" /> Gemini AI Emergency Summary:
+            </p>
+            
+            {isAiLoading ? (
+              <div className="flex items-center gap-2 mt-2">
+                <div className="w-4 h-4 border-2 border-vlink-trust border-t-transparent rounded-full animate-spin" />
+                <span className="text-xs font-mono text-[#666]">Synthesizing AI Summary...</span>
+              </div>
+            ) : aiSummary ? (
+              <div className="text-xs text-[#333] leading-relaxed mt-2 space-y-1 font-semibold whitespace-pre-line">
+                {aiSummary}
+              </div>
+            ) : (
+              <p className="text-xs text-[#666] mt-2 italic">Unable to load emergency summary brief.</p>
+            )}
+          </div>
           {/* 1. Name */}
           <div className="border-2 border-[#d1e42d] p-4 rounded-xl bg-[#fafafa]">
             <p className="font-bold text-xs text-[#555] uppercase flex items-center gap-1.5">
@@ -457,6 +506,38 @@ export default function ScanPage() {
               )}
             </div>
           )}
+
+          {/* Medical Documents Card */}
+          {profile.documents && (() => {
+            try {
+              const docs = JSON.parse(profile.documents);
+              if (Array.isArray(docs) && docs.length > 0) {
+                return (
+                  <div className="border-2 border-[#d1e42d] p-4 rounded-xl bg-[#fafafa] space-y-3">
+                    <p className="font-bold text-xs text-[#555] uppercase flex items-center gap-1.5">
+                      <FileText className="w-4 h-4 text-vlink-trust" /> Medical Documents (दस्तावेज़):
+                    </p>
+                    <div className="space-y-2">
+                      {docs.map((doc: any, idx: number) => (
+                        <a
+                          key={idx}
+                          href={doc.data}
+                          download={doc.name}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="flex items-center justify-between p-2.5 bg-white border border-vlink-line rounded-lg text-xs hover:border-vlink-trust transition-colors"
+                        >
+                          <span className="font-bold text-vlink-trust-deep truncate max-w-xs">{doc.name}</span>
+                          <span className="text-[10px] text-vlink-pulse font-bold underline">Download / View</span>
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+                );
+              }
+            } catch (e) {}
+            return null;
+          })()}
         </div>
 
         {/* Standard Emergency Services Buttons */}
