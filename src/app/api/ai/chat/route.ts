@@ -34,15 +34,48 @@ Be warm, professional, and keep replies short (under 60 words). If you don't kno
       return NextResponse.json({ reply });
     }
 
-    // Call Gemini endpoint
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${apiKey}`;
-    
-    // Parse chat context history
+    const isOpenRouter = apiKey.startsWith("sk-or-") || apiKey.startsWith("sk-");
+    const url = isOpenRouter 
+      ? "https://openrouter.ai/api/v1/chat/completions"
+      : `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${apiKey}`;
+
+    const headers: Record<string, string> = {
+      "Content-Type": "application/json"
+    };
+
+    if (isOpenRouter) {
+      headers["Authorization"] = `Bearer ${apiKey}`;
+      headers["HTTP-Referer"] = "https://rescueqr.com";
+      headers["X-Title"] = "RescueQR";
+    }
+
+    const openRouterModel = modelName.includes("/") ? modelName : "google/gemini-2.5-flash";
+
+    // Build history for OpenRouter standard chat completions format
+    const openRouterMessages = [
+      { role: "system", content: systemInstruction }
+    ];
+    if (Array.isArray(history)) {
+      history.forEach((h: any) => {
+        openRouterMessages.push({
+          role: h.role === 'user' ? 'user' : 'assistant',
+          content: h.text
+        });
+      });
+    }
+    openRouterMessages.push({ role: "user", content: message });
+
+    // Parse chat context history for Google API
     const context = Array.isArray(history)
       ? history.map((h: any) => `${h.role === 'user' ? 'user' : 'model'}: ${h.text}`).join("\n") + "\n"
       : "";
 
-    const body = {
+    const body = isOpenRouter ? {
+      model: openRouterModel,
+      messages: openRouterMessages,
+      temperature: 0.5,
+      max_tokens: 200
+    } : {
       contents: [{ role: "user", parts: [{ text: `${context}user: ${message}` }] }],
       systemInstruction: { parts: [{ text: systemInstruction }] },
       generationConfig: {
@@ -53,7 +86,7 @@ Be warm, professional, and keep replies short (under 60 words). If you don't kno
 
     const response = await fetch(url, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers,
       body: JSON.stringify(body),
     });
 
@@ -63,7 +96,12 @@ Be warm, professional, and keep replies short (under 60 words). If you don't kno
     }
 
     const data = await response.json();
-    const reply = data?.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || "I am here to help. Could you please rephrase your question?";
+    let reply = "";
+    if (isOpenRouter) {
+      reply = data?.choices?.[0]?.message?.content?.trim() || "I am here to help. Could you please rephrase your question?";
+    } else {
+      reply = data?.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || "I am here to help. Could you please rephrase your question?";
+    }
     
     return NextResponse.json({ reply });
 

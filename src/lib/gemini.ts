@@ -19,10 +19,32 @@ async function callGeminiRaw(systemInstruction: string, prompt: string): Promise
     throw new Error('NO_API_KEY');
   }
 
-  // Raw API call using standard fetch for robust execution without SDK version problems
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${apiKey}`;
-  
-  const body = {
+  const isOpenRouter = apiKey.startsWith("sk-or-") || apiKey.startsWith("sk-");
+  const url = isOpenRouter 
+    ? "https://openrouter.ai/api/v1/chat/completions"
+    : `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${apiKey}`;
+
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/json',
+  };
+
+  if (isOpenRouter) {
+    headers['Authorization'] = `Bearer ${apiKey}`;
+    headers['HTTP-Referer'] = 'https://rescueqr.com';
+    headers['X-Title'] = 'RescueQR';
+  }
+
+  const openRouterModel = modelName.includes("/") ? modelName : `google/gemini-2.5-flash`;
+
+  const body = isOpenRouter ? {
+    model: openRouterModel,
+    messages: [
+      { role: 'system', content: systemInstruction },
+      { role: 'user', content: prompt }
+    ],
+    temperature: 0.4,
+    max_tokens: 600,
+  } : {
     contents: [{ role: 'user', parts: [{ text: prompt }] }],
     systemInstruction: { parts: [{ text: systemInstruction }] },
     generationConfig: {
@@ -33,9 +55,7 @@ async function callGeminiRaw(systemInstruction: string, prompt: string): Promise
 
   const response = await fetch(url, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
+    headers,
     body: JSON.stringify(body),
   });
 
@@ -45,6 +65,9 @@ async function callGeminiRaw(systemInstruction: string, prompt: string): Promise
   }
 
   const data = await response.json();
+  if (isOpenRouter) {
+    return data?.choices?.[0]?.message?.content?.trim() || '';
+  }
   return data?.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || '';
 }
 
