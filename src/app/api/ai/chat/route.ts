@@ -7,7 +7,8 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Message is required" }, { status: 400 });
     }
 
-    const apiKey = process.env.GEMINI_API_KEY || "";
+    const customKey = request.headers.get("x-gemini-key");
+    const apiKey = customKey || process.env.GEMINI_API_KEY || "";
     const modelName = process.env.GEMINI_MODEL || "gemini-2.5-flash";
 
     const systemInstruction = `You are the customer support assistant on the RescueQR website. 

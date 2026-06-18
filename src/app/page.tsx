@@ -20,7 +20,8 @@ import {
   Clock,
   Printer,
   X,
-  ChevronRight
+  ChevronRight,
+  Key
 } from "lucide-react";
 
 export default function Home() {
@@ -31,6 +32,13 @@ export default function Home() {
     { role: 'bot', text: "Hi! Ask me how RescueQR works, how to set up a profile, or about pricing." }
   ]);
   const [isChatLoading, setIsChatLoading] = useState(false);
+  const [customApiKey, setCustomApiKey] = useState("");
+  const [isKeyEditing, setIsKeyEditing] = useState(false);
+
+  useEffect(() => {
+    const savedKey = localStorage.getItem("rescueqr_gemini_api_key") || "";
+    setCustomApiKey(savedKey);
+  }, []);
 
   // FAQ state
   const [openFaq, setOpenFaq] = useState<number | null>(null);
@@ -67,9 +75,13 @@ export default function Home() {
 
     try {
       // Send to server API route
+      const customKey = localStorage.getItem("rescueqr_gemini_api_key") || "";
       const res = await fetch("/api/ai/chat", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { 
+          "Content-Type": "application/json",
+          ...(customKey ? { "x-gemini-key": customKey } : {})
+        },
         body: JSON.stringify({
           message: userText,
           history: chatHistory.slice(-4)
@@ -83,7 +95,7 @@ export default function Home() {
         setChatHistory(prev => [...prev, { role: 'bot', text: data.error || "Something went wrong. Please try again." }]);
       }
     } catch (err) {
-      setChatHistory(prev => [...prev, { role: 'bot', text: "AI assistant is temporarily in offline demo mode. Set GEMINI_API_KEY to test live answers." }]);
+      setChatHistory(prev => [...prev, { role: 'bot', text: "AI assistant is temporarily in offline demo mode. Please save a valid Gemini API Key in the settings (key icon above) to test live answers." }]);
     } finally {
       setIsChatLoading(false);
     }
@@ -547,12 +559,48 @@ export default function Home() {
         
         {isChatOpen && (
           <div className="absolute bottom-16 right-0 w-80 bg-white border border-vlink-line rounded-2xl shadow-2xl flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-250">
-            <div className="bg-vlink-trust-deep text-white p-4">
-              <h3 className="font-bold text-sm font-display flex items-center gap-1.5">
-                <Sparkles className="w-4 h-4 text-vlink-pulse" /> Ask RescueQR
-              </h3>
-              <p className="text-[10px] text-vlink-paper/70 font-mono mt-0.5">Gemini-powered customer agent</p>
+            <div className="bg-vlink-trust-deep text-white p-4 flex justify-between items-center">
+              <div>
+                <h3 className="font-bold text-sm font-display flex items-center gap-1.5">
+                  <Sparkles className="w-4 h-4 text-vlink-pulse" /> Ask RescueQR
+                </h3>
+                <p className="text-[10px] text-vlink-paper/70 font-mono mt-0.5">Gemini-powered customer agent</p>
+              </div>
+              <button 
+                onClick={() => setIsKeyEditing(!isKeyEditing)}
+                className="text-white/80 hover:text-white p-1 hover:bg-white/10 rounded-lg transition-colors focus:outline-none"
+                title="Configure Gemini API Key"
+              >
+                <Key className="w-4 h-4" />
+              </button>
             </div>
+            
+            {isKeyEditing && (
+              <div className="bg-[#fafafa] border-b border-vlink-line p-3 space-y-2 text-xs">
+                <div className="font-bold text-[#333]">Gemini API Key:</div>
+                <div className="flex gap-2">
+                  <input
+                    type="password"
+                    placeholder="Enter API Key..."
+                    value={customApiKey}
+                    onChange={(e) => setCustomApiKey(e.target.value)}
+                    className="flex-1 px-2.5 py-1.5 border border-vlink-line rounded-lg text-xs outline-none focus:border-vlink-trust bg-white font-mono text-vlink-ink"
+                  />
+                  <button
+                    onClick={() => {
+                      localStorage.setItem("rescueqr_gemini_api_key", customApiKey.trim());
+                      setIsKeyEditing(false);
+                    }}
+                    className="px-3 py-1.5 bg-vlink-pulse text-white font-bold rounded-lg text-[10px] uppercase hover:bg-vlink-pulse/90 focus:outline-none"
+                  >
+                    Save
+                  </button>
+                </div>
+                <p className="text-[9px] text-[#666] leading-tight">
+                  Saved locally in your browser. Used to enable live support chat.
+                </p>
+              </div>
+            )}
             
             <div className="flex-1 h-64 overflow-y-auto p-4 space-y-3 bg-vlink-paper/20">
               {chatHistory.map((msg, i) => (
