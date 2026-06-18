@@ -81,18 +81,7 @@ export default function ScanPage() {
     return `sms:${cleanPhone}?body=${encodedMessage}`;
   };
 
-  // SOS Modal State
-  const [isSosOpen, setIsSosOpen] = useState(false);
-  const [targetNumber, setTargetNumber] = useState("");
-  const [targetName, setTargetName] = useState("");
-  const [responderName, setResponderName] = useState("");
-  const [responderMobile, setResponderMobile] = useState("");
-  
-  // Math puzzle state
-  const [puzzleText, setPuzzleText] = useState("");
-  const [correctAnswer, setCorrectAnswer] = useState(0);
-  const [userAnswer, setUserAnswer] = useState("");
-  const [puzzleError, setPuzzleError] = useState(false);
+
 
 
 
@@ -249,36 +238,6 @@ export default function ScanPage() {
     }
   };
 
-  // SOS modal helper
-  const openSosModal = (phone: string, name: string) => {
-    setTargetNumber(phone);
-    setTargetName(name);
-    
-    // Generate math puzzle
-    const num1 = Math.floor(Math.random() * 9) + 2;
-    const num2 = Math.floor(Math.random() * 8) + 2;
-    setPuzzleText(`${num1} + ${num2} = ?`);
-    setCorrectAnswer(num1 + num2);
-    setUserAnswer("");
-    setPuzzleError(false);
-    
-    setIsSosOpen(true);
-  };
-
-  const handleSendAlert = (e: React.FormEvent) => {
-    e.preventDefault();
-    const ans = parseInt(userAnswer);
-    if (ans !== correctAnswer) {
-      setPuzzleError(true);
-      return;
-    }
-
-    setPuzzleError(false);
-    setIsSosOpen(false);
-    
-    // Trigger Phone Call
-    window.location.href = `tel:${targetNumber}`;
-  };
 
   if (isLoading) {
     return (
@@ -361,12 +320,12 @@ export default function ScanPage() {
                   >
                     SMS
                   </a>
-                  <button 
-                    onClick={() => openSosModal(profile.phone!, "Mobile Phone")} 
-                    className="bg-[#28a745] hover:bg-[#218838] text-white px-4 py-1.5 rounded-full text-xs font-bold shadow-sm transition-colors uppercase font-mono"
+                  <a 
+                    href={`tel:${profile.phone}`} 
+                    className="bg-[#28a745] hover:bg-[#218838] text-white px-4 py-1.5 rounded-full text-xs font-bold shadow-sm transition-colors uppercase font-mono flex items-center justify-center"
                   >
                     Call
-                  </button>
+                  </a>
                 </div>
               </div>
             </div>
@@ -387,12 +346,12 @@ export default function ScanPage() {
                   >
                     SMS
                   </a>
-                  <button 
-                    onClick={() => openSosModal(profile.father_mother_phone!, "Father/Mother")} 
-                    className="bg-[#28a745] hover:bg-[#218838] text-white px-4 py-1.5 rounded-full text-xs font-bold shadow-sm transition-colors uppercase font-mono"
+                  <a 
+                    href={`tel:${profile.father_mother_phone}`} 
+                    className="bg-[#28a745] hover:bg-[#218838] text-white px-4 py-1.5 rounded-full text-xs font-bold shadow-sm transition-colors uppercase font-mono flex items-center justify-center"
                   >
                     Call
-                  </button>
+                  </a>
                 </div>
               </div>
             </div>
@@ -413,12 +372,12 @@ export default function ScanPage() {
                   >
                     SMS
                   </a>
-                  <button 
-                    onClick={() => openSosModal(profile.brother_sister_phone!, "Brother/Sister")} 
-                    className="bg-[#28a745] hover:bg-[#218838] text-white px-4 py-1.5 rounded-full text-xs font-bold shadow-sm transition-colors uppercase font-mono"
+                  <a 
+                    href={`tel:${profile.brother_sister_phone}`} 
+                    className="bg-[#28a745] hover:bg-[#218838] text-white px-4 py-1.5 rounded-full text-xs font-bold shadow-sm transition-colors uppercase font-mono flex items-center justify-center"
                   >
                     Call
-                  </button>
+                  </a>
                 </div>
               </div>
             </div>
@@ -439,12 +398,12 @@ export default function ScanPage() {
                   >
                     SMS
                   </a>
-                  <button 
-                    onClick={() => openSosModal(profile.friend_phone!, "Friend")} 
-                    className="bg-[#28a745] hover:bg-[#218838] text-white px-4 py-1.5 rounded-full text-xs font-bold shadow-sm transition-colors uppercase font-mono"
+                  <a 
+                    href={`tel:${profile.friend_phone}`} 
+                    className="bg-[#28a745] hover:bg-[#218838] text-white px-4 py-1.5 rounded-full text-xs font-bold shadow-sm transition-colors uppercase font-mono flex items-center justify-center"
                   >
                     Call
-                  </button>
+                  </a>
                 </div>
               </div>
             </div>
@@ -540,81 +499,7 @@ export default function ScanPage() {
 
       </div>
 
-      {/* SOS Form Puzzle Modal */}
-      {isSosOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4">
-          <div className="bg-white rounded-2xl shadow-2xl border border-vlink-line w-full max-w-sm p-6 space-y-4 text-xs">
-            <div className="flex justify-between items-center border-b border-vlink-line pb-2.5">
-              <h3 className="font-bold text-[#dc3545] text-sm flex items-center gap-1.5">
-                🚨 Send Emergency Alert (अलर्ट भेजे)
-              </h3>
-              <button 
-                onClick={() => setIsSosOpen(false)}
-                className="text-vlink-ink-soft hover:text-vlink-pulse p-1"
-              >
-                &times;
-              </button>
-            </div>
 
-            <p className="text-[#666] leading-relaxed">
-              You are about to place an emergency call to <strong>{targetName}</strong>. Please solve the puzzle below to verify your action.
-            </p>
-
-            <form onSubmit={handleSendAlert} className="space-y-4">
-              <div className="space-y-1">
-                <label className="font-bold text-[#333] block">Your Name (आपका नाम):</label>
-                <input
-                  type="text"
-                  required
-                  value={responderName}
-                  onChange={(e) => setResponderName(e.target.value)}
-                  placeholder="e.g. Rahul Sharma"
-                  className="w-full px-3 py-2 border border-vlink-line rounded-lg outline-none bg-vlink-paper/20 focus:border-vlink-trust"
-                />
-              </div>
-
-              <div className="space-y-1">
-                <label className="font-bold text-[#333] block">Your Mobile Number (आपके मोबाइल न.):</label>
-                <input
-                  type="tel"
-                  required
-                  pattern="[0-9]{10}"
-                  title="Please enter a 10-digit mobile number"
-                  value={responderMobile}
-                  onChange={(e) => setResponderMobile(e.target.value)}
-                  placeholder="e.g. 9876543210"
-                  className="w-full px-3 py-2 border border-vlink-line rounded-lg outline-none bg-vlink-paper/20 focus:border-vlink-trust font-mono"
-                />
-              </div>
-
-              <div className="space-y-1 bg-vlink-paper/40 p-3 rounded-lg border border-vlink-line flex items-center justify-between">
-                <span className="font-bold text-vlink-trust-deep font-mono text-sm">{puzzleText}</span>
-                <input
-                  type="number"
-                  required
-                  value={userAnswer}
-                  onChange={(e) => setUserAnswer(e.target.value)}
-                  placeholder="Result"
-                  className="w-20 px-2.5 py-1 border border-vlink-line rounded-md text-center outline-none bg-white font-mono text-sm"
-                />
-              </div>
-
-              {puzzleError && (
-                <div className="text-red-600 font-bold bg-red-50 p-2 border border-red-200 rounded text-center">
-                  Incorrect puzzle answer. Please try again.
-                </div>
-              )}
-
-              <button
-                type="submit"
-                className="w-full py-3 bg-vlink-pulse hover:bg-[#c82333] text-white font-bold rounded-full text-xs transition-colors uppercase tracking-wider font-mono shadow-md"
-              >
-                Send Alert & Call (अलर्ट भेजे)
-              </button>
-            </form>
-          </div>
-        </div>
-      )}
 
 
 
