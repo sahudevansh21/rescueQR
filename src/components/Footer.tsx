@@ -11,7 +11,7 @@ export default function Footer() {
               <circle cx="15" cy="15" r="14" stroke="#9FC4BC" strokeWidth="2" />
               <path d="M5 15h6l2-6 4 12 2-6h6" stroke="#FF5A4E" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
-            <span>VitalLink AI</span>
+            <span>RescueQR</span>
           </Link>
           <p className="text-vlink-paper/85 text-sm max-w-sm">
             Providing first responders with instant, life-saving medical data when every second counts. Dynamic QR identification cards, stickers, and wristbands powered by Gemini AI.
@@ -41,10 +41,10 @@ export default function Footer() {
       
       <div className="max-w-7xl mx-auto border-t border-vlink-trust/50 mt-10 pt-6 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-vlink-paper/60">
         <div>
-          © {new Date().getFullYear()} VitalLink AI. All rights reserved.
+          © {new Date().getFullYear()} RescueQR. All rights reserved.
         </div>
         <div className="font-mono text-center md:text-right max-w-md">
-          DISCLAIMER: VitalLink AI is an information sharing platform. Scanning QR tags provides reference clinical summaries; it is not a direct healthcare service, a medical diagnosis, or a replacement for calling 112/911/emergency services.
+          DISCLAIMER: RescueQR is an information sharing platform. Scanning QR tags provides reference clinical summaries; it is not a direct healthcare service, a medical diagnosis, or a replacement for calling 112/911/emergency services.
         </div>
       </div>
     </footer>

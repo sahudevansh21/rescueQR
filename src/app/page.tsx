@@ -28,7 +28,7 @@ export default function Home() {
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [chatMessage, setChatMessage] = useState("");
   const [chatHistory, setChatHistory] = useState<Array<{ role: 'user' | 'bot'; text: string }>>([
-    { role: 'bot', text: "Hi! Ask me how VitalLink AI works, how to set up a profile, or about pricing." }
+    { role: 'bot', text: "Hi! Ask me how RescueQR works, how to set up a profile, or about pricing." }
   ]);
   const [isChatLoading, setIsChatLoading] = useState(false);
 
@@ -96,7 +96,7 @@ export default function Home() {
     },
     {
       q: "Is my medical and personal data safe?",
-      a: "Yes. VitalLink AI uses row-level encryption and secure database schemas in Supabase. Your emergency details are only shown when someone scans the physical QR code. We do not sell or share your medical data."
+      a: "Yes. RescueQR uses row-level encryption and secure database schemas in Supabase. Your emergency details are only shown when someone scans the physical QR code. We do not sell or share your medical data."
     },
     {
       q: "How do the family alerts work?",
@@ -123,7 +123,7 @@ export default function Home() {
               One scan tells responders everything they need to know.
             </h1>
             <p className="text-lg text-vlink-ink-soft max-w-xl">
-              VitalLink AI turns a simple card, sticker, or wristband into a lifeline. In an emergency, first responders instantly access critical medical details, doctor contacts, and AI-guided triage summaries.
+              RescueQR turns a simple card, sticker, or wristband into a lifeline. In an emergency, first responders instantly access critical medical details, doctor contacts, and AI-guided triage summaries.
             </p>
             <div className="flex flex-wrap gap-4">
               <Link 
@@ -149,7 +149,7 @@ export default function Home() {
           <div className="lg:col-span-5 flex justify-center relative">
             <div className="relative w-80 bg-white rounded-3xl border border-vlink-line p-6 shadow-2xl transition-all hover:-translate-y-1 hover:shadow-vlink-trust/10 duration-300">
               <div className="flex justify-between items-center mb-6">
-                <span className="text-xs font-mono tracking-wider text-vlink-ink-soft/80">VitalLink AI · Tag 021</span>
+                <span className="text-xs font-mono tracking-wider text-vlink-ink-soft/80">RescueQR · Tag 021</span>
                 <Heart className="w-5 h-5 text-vlink-pulse fill-vlink-pulse animate-pulse" />
               </div>
               
@@ -540,7 +540,7 @@ export default function Home() {
         <button
           onClick={() => setIsChatOpen(!isChatOpen)}
           className="w-14 h-14 rounded-full bg-vlink-trust-deep hover:bg-vlink-trust text-white flex items-center justify-center shadow-xl hover:scale-105 transition-all focus:outline-none border border-white/20 animate-beacon"
-          aria-label="Ask VitalLink AI Support"
+          aria-label="Ask RescueQR Support"
         >
           {isChatOpen ? <X className="w-6 h-6" /> : <MessageSquare className="w-6 h-6" />}
         </button>
@@ -549,7 +549,7 @@ export default function Home() {
           <div className="absolute bottom-16 right-0 w-80 bg-white border border-vlink-line rounded-2xl shadow-2xl flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-250">
             <div className="bg-vlink-trust-deep text-white p-4">
               <h3 className="font-bold text-sm font-display flex items-center gap-1.5">
-                <Sparkles className="w-4 h-4 text-vlink-pulse" /> Ask VitalLink AI
+                <Sparkles className="w-4 h-4 text-vlink-pulse" /> Ask RescueQR
               </h3>
               <p className="text-[10px] text-vlink-paper/70 font-mono mt-0.5">Gemini-powered customer agent</p>
             </div>

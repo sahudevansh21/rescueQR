@@ -122,7 +122,7 @@ export default function AdminDashboard() {
       const mapped: PatientUser[] = pList.map((p: any) => {
         const userScans = sList.filter((s: any) => s.profile_id === p.id);
         const nameClean = (p.full_name || "Anonymous").toLowerCase().replace(/\s+/g, "");
-        const email = p.email || `${nameClean}@vitallink.ai`;
+        const email = p.email || `${nameClean}@rescueqr.com`;
         
         return {
           id: p.id,
@@ -244,7 +244,7 @@ export default function AdminDashboard() {
   };
 
   const getScanUrlForUser = (u: PatientUser) => {
-    const origin = typeof window !== "undefined" ? window.location.origin : "https://vitallink.ai";
+    const origin = typeof window !== "undefined" ? window.location.origin : "https://rescueqr.com";
     if (isRealSupabase) {
       return `${origin}/scan/${u.id}`;
     } else {
@@ -746,7 +746,7 @@ export default function AdminDashboard() {
               
               <a
                 href={qrCodeUrl}
-                download={`vitallink-patient-${selectedUser.id}.png`}
+                download={`rescueqr-patient-${selectedUser.id}.png`}
                 className="w-full py-2.5 bg-vlink-pulse hover:bg-vlink-pulse/90 text-white font-bold rounded-full transition-all flex items-center justify-center gap-2 shadow"
               >
                 Download PNG Tag

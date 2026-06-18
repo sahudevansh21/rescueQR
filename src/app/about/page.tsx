@@ -17,7 +17,7 @@ export default function AboutPage() {
               Bridging the gap in critical moments.
             </h1>
             <p className="text-vlink-ink-soft">
-              VitalLink AI was founded to solve a simple problem: in a medical crisis, the person who knows your history, allergies, and contact details isn't always there to speak.
+              RescueQR was founded to solve a simple problem: in a medical crisis, the person who knows your history, allergies, and contact details isn't always there to speak.
             </p>
           </div>
 

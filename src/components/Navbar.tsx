@@ -60,7 +60,7 @@ export default function Navbar() {
                 <circle cx="15" cy="15" r="14" stroke="#1C5C53" strokeWidth="2" />
                 <path d="M5 15h6l2-6 4 12 2-6h6" stroke="#FF5A4E" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
-              <span>VitalLink AI</span>
+              <span>RescueQR</span>
             </Link>
           </div>
           

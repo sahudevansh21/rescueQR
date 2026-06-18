@@ -10,10 +10,10 @@ export async function POST(request: Request) {
     const apiKey = process.env.GEMINI_API_KEY || "";
     const modelName = process.env.GEMINI_MODEL || "gemini-2.5-flash";
 
-    const systemInstruction = `You are the customer support assistant on the VitalLink AI website. 
-VitalLink AI sells dynamic emergency identification tags (cards, stickers, wristbands). Scanning a tag shows a person's blood group, allergies, medications, and emergency contacts to responders. It captures GPS coordinates and dispatches automated SMS alerts to families. Gemini AI generates concise summaries.
+    const systemInstruction = `You are the customer support assistant on the RescueQR website. 
+RescueQR sells dynamic emergency identification tags (cards, stickers, wristbands). Scanning a tag shows a person's blood group, allergies, medications, and emergency contacts to responders. It captures GPS coordinates and dispatches automated SMS alerts to families. Gemini AI generates concise summaries.
 Answer questions about features, setup, and pricing (Free tier vs Premium $2.99/mo or $24/yr).
-Be warm, professional, and keep replies short (under 60 words). If you don't know a detail, suggest contacting our advocacy team at support@virtallinkai.com.`;
+Be warm, professional, and keep replies short (under 60 words). If you don't know a detail, suggest contacting our advocacy team at support@rescueqr.com.`;
 
     if (!apiKey) {
       // Offline local Q&A answers mapping for mock mode
@@ -21,13 +21,13 @@ Be warm, professional, and keep replies short (under 60 words). If you don't kno
       let reply = "I am currently in demo mode. Setting GEMINI_API_KEY in your env file will let me answer all your custom questions live!";
       
       if (lowerMsg.includes("how") && lowerMsg.includes("work")) {
-        reply = "VitalLink AI gives you a unique QR code. First responders scan it to see your medical info. Simultaneously, we capture GPS coordinates and text your family.";
+        reply = "RescueQR gives you a unique QR code. First responders scan it to see your medical info. Simultaneously, we capture GPS coordinates and text your family.";
       } else if (lowerMsg.includes("price") || lowerMsg.includes("cost") || lowerMsg.includes("free")) {
-        reply = "Our basic QR tag is 100% Free. VitalLink Premium is just $2.99/mo (or $24/yr) and includes Gemini AI briefs, SMS scan alerts, and document storage.";
+        reply = "Our basic QR tag is 100% Free. RescueQR Premium is just $2.99/mo (or $24/yr) and includes Gemini AI briefs, SMS scan alerts, and document storage.";
       } else if (lowerMsg.includes("safe") || lowerMsg.includes("privacy") || lowerMsg.includes("secure")) {
         reply = "Your health data is highly secure. Profiles are protected by row-level database rules and are only displayed when your physical tag is scanned.";
       } else if (lowerMsg.includes("contact") || lowerMsg.includes("support")) {
-        reply = "You can contact our advocacy support team at support@virtallinkai.com or call us at +91 22 8887 7766.";
+        reply = "You can contact our advocacy support team at support@rescueqr.com or call us at +91 22 8887 7766.";
       }
       
       return NextResponse.json({ reply });

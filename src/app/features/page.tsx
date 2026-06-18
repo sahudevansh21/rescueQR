@@ -27,7 +27,7 @@ export default function FeaturesPage() {
               Safety features designed for extreme speed.
             </h1>
             <p className="text-vlink-ink-soft">
-              Every detail of VitalLink AI is engineered to be visible and functional in the critical moments of an emergency.
+              Every detail of RescueQR is engineered to be visible and functional in the critical moments of an emergency.
             </p>
           </div>
 

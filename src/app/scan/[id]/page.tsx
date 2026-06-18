@@ -70,7 +70,7 @@ export default function ScanPage() {
       locationStr = `Location: ${window.location.origin}/scan/${profile?.id || "patient"}`;
     }
 
-    const message = `EMERGENCY: I have scanned the Lifeline Emergency QR for ${patientName || "this patient"}. They need assistance. ${locationStr}`;
+    const message = `EMERGENCY: I have scanned the RescueQR for ${patientName || "this patient"}. They need assistance. ${locationStr}`;
     const encodedMessage = encodeURIComponent(message);
     
     // Detect iOS
@@ -532,8 +532,8 @@ export default function ScanPage() {
 
         {/* Footer */}
         <div className="text-center text-xs text-[#6c757d] pt-2 border-t border-vlink-line/60 space-y-1">
-          <p className="font-bold">Powered by VitalLink AI</p>
-          <p>An Initiative by VitalLink AI</p>
+          <p className="font-bold">Powered by RescueQR</p>
+          <p>An Initiative by RescueQR</p>
         </div>
 
       </div>

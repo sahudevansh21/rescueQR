@@ -1,4 +1,4 @@
-// Simulated Notifications Dispatcher for VitalLink AI
+// Simulated Notifications Dispatcher for RescueQR
 
 export interface NotificationPayload {
   recipientName: string;
@@ -15,7 +15,7 @@ export async function sendEmergencySMS(
   userName: string,
   mapLink: string
 ): Promise<NotificationPayload> {
-  const message = `URGENT: VitalLink AI scan alert. ${userName}'s emergency QR card was scanned. Live GPS location: ${mapLink}. Respond immediately.`;
+  const message = `URGENT: RescueQR scan alert. ${userName}'s emergency QR card was scanned. Live GPS location: ${mapLink}. Respond immediately.`;
   console.log(`[SMS DISPATCH] Sending to ${contactName} (${phoneNumber}): ${message}`);
   
   // Simulate network delay
@@ -37,7 +37,7 @@ export async function sendEmergencyEmail(
   mapLink: string,
   details: string
 ): Promise<NotificationPayload> {
-  const message = `Subject: EMERGENCY SCAN ALERT - ${userName} - VitalLink AI\n\nHello,\n\nThis is an automated alert from VitalLink AI. ${userName}'s emergency identification profile has been scanned.\n\nGPS Coordinates / Location: ${mapLink}\nScan Details: ${details}\n\nPlease check on them or coordinate with first responders immediately.`;
+  const message = `Subject: EMERGENCY SCAN ALERT - ${userName} - RescueQR\n\nHello,\n\nThis is an automated alert from RescueQR. ${userName}'s emergency identification profile has been scanned.\n\nGPS Coordinates / Location: ${mapLink}\nScan Details: ${details}\n\nPlease check on them or coordinate with first responders immediately.`;
   console.log(`[EMAIL DISPATCH] Sending to ${emailAddress}:\n${message}`);
   
   await new Promise(resolve => setTimeout(resolve, 600));

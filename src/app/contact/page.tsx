@@ -56,7 +56,7 @@ export default function ContactPage() {
                   <Mail className="w-5 h-5 text-vlink-pulse" />
                   <div>
                     <h4 className="text-xs font-bold font-mono text-vlink-paper/75 uppercase tracking-wider">Email Us</h4>
-                    <p className="text-sm">support@virtallinkai.com</p>
+                    <p className="text-sm">support@rescueqr.com</p>
                   </div>
                 </div>
 
@@ -89,7 +89,7 @@ export default function ContactPage() {
                   </div>
                   <h3 className="text-xl font-bold text-vlink-trust-deep font-display">Message Sent Successfully!</h3>
                   <p className="text-sm text-vlink-ink-soft max-w-sm mx-auto">
-                    Thank you for contacting VitalLink AI. Our support advocacy team will respond within 4-6 hours.
+                    Thank you for contacting RescueQR. Our support advocacy team will respond within 4-6 hours.
                   </p>
                   <button
                     onClick={() => setSubmitted(false)}

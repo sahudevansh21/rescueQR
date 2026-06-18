@@ -50,7 +50,7 @@ async function callGeminiRaw(systemInstruction: string, prompt: string): Promise
 
 // 1. AI Emergency Summary
 export async function getEmergencySummary(profile: any): Promise<string> {
-  const system = `You are an AI medical emergency assistant embedded in VitalLink AI.
+  const system = `You are an AI medical emergency assistant embedded in RescueQR.
 Analyze the user's emergency profile and generate a 10-second first-responder summary.
 Identify:
 1. Critical risks (allergies, heart conditions, diabetes, etc.)

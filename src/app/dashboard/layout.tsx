@@ -69,7 +69,7 @@ export default function DashboardLayout({
             <circle cx="15" cy="15" r="14" stroke="#9FC4BC" strokeWidth="2" />
             <path d="M5 15h6l2-6 4 12 2-6h6" stroke="#FF5A4E" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
-          <span>VitalLink AI</span>
+          <span>RescueQR</span>
         </Link>
         <button
           onClick={() => setIsSidebarOpen(!isSidebarOpen)}
@@ -89,7 +89,7 @@ export default function DashboardLayout({
               <circle cx="15" cy="15" r="14" stroke="#9FC4BC" strokeWidth="2" />
               <path d="M5 15h6l2-6 4 12 2-6h6" stroke="#FF5A4E" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
-            <span>VitalLink AI</span>
+            <span>RescueQR</span>
           </Link>
           <button className="md:hidden text-vlink-paper/70 hover:text-white" onClick={() => setIsSidebarOpen(false)}>
             <X className="w-5 h-5" />
@@ -121,7 +121,7 @@ export default function DashboardLayout({
           <div className="bg-white/5 border border-white/10 rounded-2xl p-3 flex gap-2 items-center">
             <Sparkles className="w-5 h-5 text-vlink-pulse flex-shrink-0" />
             <div className="text-[10px] leading-relaxed">
-              <span className="font-bold text-white block">VitalLink Premium</span>
+              <span className="font-bold text-white block">RescueQR Premium</span>
               <span className="text-vlink-paper/60">AI features enabled</span>
             </div>
           </div>

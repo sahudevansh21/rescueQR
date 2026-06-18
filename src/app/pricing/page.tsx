@@ -27,7 +27,7 @@ export default function PricingPage() {
       popular: false
     },
     {
-      name: "VitalLink Premium",
+      name: "RescueQR Premium",
       price: isAnnual ? "24" : "2.99",
       period: isAnnual ? "/ year" : "/ month",
       desc: "Full AI assistance, document vault, and real-time SMS alerts.",

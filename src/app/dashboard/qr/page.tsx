@@ -129,7 +129,7 @@ export default function QRManagementPage() {
     if (!qrPngUrl) return;
     const a = document.createElement("a");
     a.href = qrPngUrl;
-    a.download = `vitallink-qr-${profileId}.png`;
+    a.download = `rescueqr-qr-${profileId}.png`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -141,7 +141,7 @@ export default function QRManagementPage() {
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `vitallink-qr-${profileId}.svg`;
+    a.download = `rescueqr-qr-${profileId}.svg`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -267,7 +267,7 @@ export default function QRManagementPage() {
               <div className="w-[3.375in] h-[2.125in] border-2 border-vlink-trust-deep rounded-2xl p-4 flex flex-col justify-between bg-white relative print-card text-vlink-trust-deep shadow-md">
                 <div className="flex justify-between items-start">
                   <div>
-                    <h4 className="text-[14px] font-extrabold font-display leading-none">VitalLink AI</h4>
+                    <h4 className="text-[14px] font-extrabold font-display leading-none">RescueQR</h4>
                     <span className="text-[7px] font-mono tracking-widest text-vlink-pulse block mt-0.5 uppercase">EMERGENCY DATA TAG</span>
                   </div>
                   <Heart className="w-4 h-4 text-vlink-pulse fill-vlink-pulse" />
@@ -298,7 +298,7 @@ export default function QRManagementPage() {
                 <div className="grid grid-cols-2 gap-4">
                   {Array.from({ length: 2 }).map((_, i) => (
                     <div key={i} className="w-32 h-32 border border-vlink-pulse rounded-2xl p-3 flex flex-col items-center justify-between text-center bg-white shadow-sm">
-                      <span className="text-[7px] font-extrabold uppercase font-mono tracking-wide text-vlink-pulse leading-none">VitalLink Emergency ID</span>
+                      <span className="text-[7px] font-extrabold uppercase font-mono tracking-wide text-vlink-pulse leading-none">RescueQR Emergency ID</span>
                       {qrPngUrl && (
                         <img src={qrPngUrl} className="w-16 h-16 border border-vlink-line p-0.5 rounded" alt="QR" />
                       )}
@@ -314,7 +314,7 @@ export default function QRManagementPage() {
               <div className="w-full flex flex-col items-center gap-4">
                 <span className="text-xs text-vlink-ink-soft font-mono no-print">Printed Loop Strip (fits 7-8 inch wrists)</span>
                 <div className="w-full max-w-md h-8 border border-vlink-trust-deep rounded bg-white flex justify-between items-center px-4 font-mono text-[9px] relative shadow-sm">
-                  <span className="font-bold">VITAL-LINK AI</span>
+                  <span className="font-bold">RESCUEQR</span>
                   <span className="text-vlink-pulse font-bold">❤️ EMERGENCY MEDICAL TAG</span>
                   <div className="flex items-center gap-2">
                     <span>SCAN IN CRISIS</span>
@@ -332,14 +332,14 @@ export default function QRManagementPage() {
             {/* Printable version that shows when window.print() is executed */}
             <div className="hidden print-only absolute inset-0 bg-white z-50 flex-col items-center justify-center p-8">
               <div className="space-y-8 text-center">
-                <h2 className="text-xl font-bold font-display text-vlink-trust-deep">VitalLink AI Printable Emergency Identifiers</h2>
+                <h2 className="text-xl font-bold font-display text-vlink-trust-deep">RescueQR Printable Emergency Identifiers</h2>
                 
                 <div className="flex flex-col items-center gap-8 border-2 border-dashed border-vlink-line p-8 rounded-3xl">
                   {/* Card Print */}
                   <div className="w-[3.375in] h-[2.125in] border-2 border-black rounded-2xl p-4 flex flex-col justify-between bg-white text-black text-left">
                     <div className="flex justify-between items-start">
                       <div>
-                        <h4 className="text-sm font-bold leading-none">VitalLink AI</h4>
+                        <h4 className="text-sm font-bold leading-none">RescueQR</h4>
                         <span className="text-[8px] font-mono tracking-widest text-red-600 block mt-0.5 uppercase">EMERGENCY DATA TAG</span>
                       </div>
                       <span className="text-lg">❤️</span>

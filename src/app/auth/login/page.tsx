@@ -139,7 +139,7 @@ export default function LoginPage() {
       <main className="flex-1 flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-8 bg-vlink-paper/20">
         <div className="sm:mx-auto sm:w-full sm:max-w-md space-y-4 text-center">
           <h2 className="text-3xl font-extrabold text-vlink-trust-deep font-display">
-            Sign in to VitalLink AI
+            Sign in to RescueQR
           </h2>
           <p className="text-sm text-vlink-ink-soft">
             Or{" "}

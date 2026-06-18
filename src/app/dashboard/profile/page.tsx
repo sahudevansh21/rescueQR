@@ -38,7 +38,7 @@ export default function ProfilePage() {
   const [primaryDoctorName, setPrimaryDoctorName] = useState("");
   const [primaryDoctorPhone, setPrimaryDoctorPhone] = useState("");
   
-  // Lifeline QR specific fields
+  // RescueQR specific fields
   const [phone, setPhone] = useState("");
   const [vehicleNumber, setVehicleNumber] = useState("");
   const [fatherMotherPhone, setFatherMotherPhone] = useState("");
@@ -553,7 +553,7 @@ export default function ProfilePage() {
             </div>
           </div>
 
-          {/* Section 4: Lifeline Emergency Contacts (Direct Mappings) */}
+          {/* Section 4: RescueQR Emergency Contacts (Direct Mappings) */}
           <div className="bg-white p-6 sm:p-8 rounded-3xl border border-vlink-line space-y-6">
             <h3 className="text-lg font-bold text-vlink-trust-deep font-display border-b border-vlink-line pb-3 flex items-center gap-2">
               <PhoneCall className="w-5 h-5 text-vlink-pulse" /> 4. Emergency Contacts (आपातकालीन नंबर)

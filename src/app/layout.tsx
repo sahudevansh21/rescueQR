@@ -22,10 +22,10 @@ const ibmPlexMono = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "VitalLink AI — Smart Emergency QR Profiles",
-  description: "VitalLink AI provides instant access to critical medical history, blood groups, and emergency contacts to save lives. Real-time alerts and AI-guided responder briefings.",
+  title: "RescueQR — Smart Emergency QR Profiles",
+  description: "RescueQR provides instant access to critical medical history, blood groups, and emergency contacts to save lives. Real-time alerts and AI-guided responder briefings.",
   keywords: ["emergency qr", "medical identification", "first responder", "medical alert", "health card"],
-  authors: [{ name: "VitalLink AI Team" }],
+  authors: [{ name: "RescueQR Team" }],
 };
 
 export default function RootLayout({
