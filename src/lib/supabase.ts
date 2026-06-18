@@ -31,6 +31,7 @@ export interface EmergencyProfile {
   friend_phone?: string;
   email?: string;
   password?: string;
+  government_id?: string;
 }
 
 export interface EmergencyContact {
@@ -88,7 +89,8 @@ class MockSupabaseClient {
               vehicle_number: 'KA-03-MP-8899',
               father_mother_phone: '9888877777',
               brother_sister_phone: '9666655555',
-              friend_phone: '9555544444'
+              friend_phone: '9555544444',
+              government_id: '9988-7766-5544'
             },
             {
               id: 'faiz',
@@ -112,7 +114,8 @@ class MockSupabaseClient {
               vehicle_number: 'MH-01-AB-1234',
               father_mother_phone: '9999988888',
               brother_sister_phone: '9999977777',
-              friend_phone: '9131797588'
+              friend_phone: '9131797588',
+              government_id: '8877-6655-4433'
             }
           ],
           contacts: [
@@ -212,7 +215,8 @@ class MockSupabaseClient {
           vehicle_number: 'KA-03-MP-8899',
           father_mother_phone: '9888877777',
           brother_sister_phone: '9666655555',
-          friend_phone: '9555544444'
+          friend_phone: '9555544444',
+          government_id: '9988-7766-5544'
         },
         {
           id: 'faiz',
@@ -236,7 +240,8 @@ class MockSupabaseClient {
           vehicle_number: 'MH-01-AB-1234',
           father_mother_phone: '9999988888',
           brother_sister_phone: '9999977777',
-          friend_phone: '9131797588'
+          friend_phone: '9131797588',
+          government_id: '8877-6655-4433'
         }
       );
       mockDb.contacts.push(
@@ -535,6 +540,7 @@ export function encodeProfileToMockToken(profile: any, contacts: any[] = []) {
     fmp,
     bsp,
     fp,
+    gov: profile.government_id || "",
     s: Math.random().toString(36).substr(2, 5)
   };
   
@@ -593,6 +599,7 @@ export function decodeMockTokenToProfile(token: string): any {
       father_mother_phone: data.fmp || "",
       brother_sister_phone: data.bsp || "",
       friend_phone: data.fp || "",
+      government_id: data.gov || "",
       is_premium: true
     };
   } catch (e) {

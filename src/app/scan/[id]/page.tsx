@@ -38,6 +38,7 @@ interface Profile {
   father_mother_phone?: string;
   brother_sister_phone?: string;
   friend_phone?: string;
+  government_id?: string;
 }
 
 interface Contact {
@@ -407,6 +408,16 @@ export default function ScanPage() {
                 📍 Address (पता):
               </p>
               <p className="text-xs font-bold text-[#0B2521] leading-relaxed mt-1">{profile.address}</p>
+            </div>
+          )}
+
+          {/* 8.5. Government ID */}
+          {profile.government_id && (
+            <div className="border-2 border-[#d1e42d] p-4 rounded-xl bg-[#fafafa]">
+              <p className="font-bold text-xs text-[#555] uppercase flex items-center gap-1.5">
+                🆔 Government ID (सरकारी दस्तावेज़ आईडी):
+              </p>
+              <p className="text-base font-mono font-bold text-[#0B2521] mt-1 uppercase">{profile.government_id}</p>
             </div>
           )}
 

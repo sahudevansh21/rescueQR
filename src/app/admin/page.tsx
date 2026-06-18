@@ -68,6 +68,7 @@ export default function AdminDashboard() {
   const [newContactRel, setNewContactRel] = useState("");
   const [newContactPhone, setNewContactPhone] = useState("");
   const [newIsPremium, setNewIsPremium] = useState(true);
+  const [newGovId, setNewGovId] = useState("");
   const [isCreating, setIsCreating] = useState(false);
 
   // Modal State - View QR
@@ -176,6 +177,7 @@ export default function AdminDashboard() {
       primary_doctor_name: newDocName || "Dr. Mehta",
       primary_doctor_phone: newDocPhone || "+91 99999 88888",
       is_premium: newIsPremium,
+      government_id: newGovId || "None listed",
       created_at: new Date().toISOString()
     };
 
@@ -202,6 +204,7 @@ export default function AdminDashboard() {
       setNewConditions("");
       setNewAllergies("");
       setNewMedications("");
+      setNewGovId("");
       setNewDocName("");
       setNewDocPhone("");
       setNewContactName("");
@@ -533,6 +536,17 @@ export default function AdminDashboard() {
                     className="w-full px-3 py-2 border border-vlink-line rounded-lg outline-none focus:border-vlink-trust bg-vlink-paper/20"
                   />
                 </div>
+              </div>
+
+              <div className="space-y-1">
+                <label className="font-bold text-vlink-trust-deep block">Government Document ID (Optional)</label>
+                <input
+                  type="text"
+                  value={newGovId}
+                  onChange={(e) => setNewGovId(e.target.value)}
+                  placeholder="e.g. Aadhaar 1234-5678-9012 or PAN ABCDE1234F"
+                  className="w-full px-3 py-2 border border-vlink-line rounded-lg outline-none focus:border-vlink-trust bg-vlink-paper/20 font-mono"
+                />
               </div>
 
               <div className="grid grid-cols-2 gap-4">

@@ -44,6 +44,7 @@ export default function ProfilePage() {
   const [fatherMotherPhone, setFatherMotherPhone] = useState("");
   const [brotherSisterPhone, setBrotherSisterPhone] = useState("");
   const [friendPhone, setFriendPhone] = useState("");
+  const [governmentId, setGovernmentId] = useState("");
   
   // Emergency Contacts state
   const [contacts, setContacts] = useState<Contact[]>([]);
@@ -72,12 +73,13 @@ export default function ProfilePage() {
     if (currentMedications) score += 10;
     if (insuranceProvider && insurancePolicyNumber) score += 10;
     if (primaryDoctorName && primaryDoctorPhone) score += 10;
+    if (governmentId) score += 10;
     if (contacts.length > 0) score += 10;
     setPrepScore(score);
   }, [
     fullName, bloodGroup, dob, address, medicalConditions, 
     allergies, currentMedications, insuranceProvider, 
-    insurancePolicyNumber, primaryDoctorName, primaryDoctorPhone, contacts
+    insurancePolicyNumber, primaryDoctorName, primaryDoctorPhone, contacts, governmentId
   ]);
 
   const loadProfile = async () => {
@@ -111,6 +113,7 @@ export default function ProfilePage() {
           setFatherMotherPhone(profile.father_mother_phone || "");
           setBrotherSisterPhone(profile.brother_sister_phone || "");
           setFriendPhone(profile.friend_phone || "");
+          setGovernmentId(profile.government_id || "");
         }
 
         const { data: fetchedContacts } = await supabase
@@ -169,6 +172,7 @@ export default function ProfilePage() {
         setFatherMotherPhone(profile.father_mother_phone || "");
         setBrotherSisterPhone(profile.brother_sister_phone || "");
         setFriendPhone(profile.friend_phone || "");
+        setGovernmentId(profile.government_id || "");
       }
 
       const mockContactsStr = localStorage.getItem("vlink_contacts") || "[]";
@@ -229,6 +233,7 @@ export default function ProfilePage() {
       father_mother_phone: fatherMotherPhone,
       brother_sister_phone: brotherSisterPhone,
       friend_phone: friendPhone,
+      government_id: governmentId,
       updated_at: new Date().toISOString()
     };
 
@@ -424,6 +429,17 @@ export default function ProfilePage() {
                   onChange={(e) => setAddress(e.target.value)}
                   placeholder="Street, City, State, ZIP"
                   className="w-full px-4 py-3 border border-vlink-line rounded-xl text-sm outline-none focus:border-vlink-trust bg-vlink-paper/10"
+                />
+              </div>
+
+              <div className="space-y-1.5 col-span-2">
+                <label className="text-xs font-semibold text-vlink-trust-deep">Government Document ID (Aadhaar / PAN / DL / Passport)</label>
+                <input
+                  type="text"
+                  value={governmentId}
+                  onChange={(e) => setGovernmentId(e.target.value)}
+                  placeholder="e.g. Aadhaar 1234-5678-9012 or PAN ABCDE1234F"
+                  className="w-full px-4 py-3 border border-vlink-line rounded-xl text-sm outline-none focus:border-vlink-trust bg-vlink-paper/10 font-mono"
                 />
               </div>
             </div>
